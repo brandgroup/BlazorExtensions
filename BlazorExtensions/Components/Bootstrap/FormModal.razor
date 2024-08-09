@@ -1,0 +1,73 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+<Modal @ref="_modal" Id="@Id">
+    <Header>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">@Title</h1>
+        @if (ShowCloseButton) {
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        }
+    </Header>
+    <Body>
+        @ChildContent
+    </Body>
+    <Footer>
+        @if (ShowCancelButton) {
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@CancelButtonText</button>
+        }
+        <button type="button" class="btn btn-primary" @onclick="OnSaveBtnClick">@SaveButtonText</button>
+    </Footer>
+</Modal>
+
+
+
+@code {
+
+    [Parameter]
+    public string? Id { get; set; }
+
+    [Parameter] public string Title { get; set; } = "";
+
+    [Parameter]
+    public bool ShowCloseButton { get; set; } = false;
+
+    [Parameter]
+    public bool ShowCancelButton { get; set; } = false;
+
+    [Parameter]
+    public string CancelButtonText { get; set; } = "Cancel";
+
+    [Parameter]
+    public string SaveButtonText { get; set; } = "Save";
+
+    [Parameter]
+    public EventHandler? OnCancelClick { get; set; }
+
+    [Parameter]
+    public EventHandler? OnSaveClick { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    private Modal? _modal;
+
+    public async Task ShowAsync() {
+        if (_modal != null) await _modal.ShowAsync();
+    }
+
+    public async Task HideAsync() {
+        if (_modal != null) await _modal.HideAsync();
+    }
+
+
+    private void OnCancelBtnClick(MouseEventArgs e) {
+        OnCancelClick?.Invoke(this, EventArgs.Empty);
+    }
+
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="e"></param>
+    private void OnSaveBtnClick(MouseEventArgs e) {
+        OnSaveClick?.Invoke(this, EventArgs.Empty);
+    }
+}

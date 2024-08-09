@@ -1,0 +1,106 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+
+@{
+    var styleString = Clickable ? "width: 18rem; cursor: pointer;" : "width: 18rem;";
+    var cardSelectClass = Selected ? "border-dark border-2" : string.Empty;
+}
+
+<div class="card shadow-sm rounded-3 @cardSelectClass" style="@styleString" @onclick="OnCardClick">
+    <!-- Card Header-->
+    <div class="card-header p-1 ps-3 pt-2 pe-2">
+        <div class="d-flex align-items-center m-0 p-0">
+            <div class="d-flex me-auto align-items-center">
+                <div class="text-seconardy m-0" style="font-size: 0.75rem;">@MiniTitle</div>
+                <h5 class="m-0">@Title</h5>
+            </div>
+            <div class="bi @Icon h3 m-0 p-0">
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Body-->
+    <div class="card-body pe-2">
+	    @ChildContent
+        <div class="d-flex flex-row-reverse gap-2">
+
+            @* Remove Record button *@
+            <button class="btn btn-outline-danger p-1" style="z-index: 2;" @onclick:stopPropagation="true" @onclick="OnDeleteBtnClick">
+                <div class="bi bi-trash h5 m-0 p-0"></div>
+            </button>
+            
+            @* Edit Record button *@
+            <button class="btn btn-outline-primary p-1" style="z-index: 2;" @onclick:stopPropagation="true" @onclick="OnEditBtnClick">
+                <div class="bi bi-pencil h5 m-0 p-0"></div>
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    [Parameter]
+    public string? MiniTitle { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public object? Tag { get; set; }
+
+    [Parameter]
+    public string Icon { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool Clickable { get; set; } = false;
+
+    [Parameter]
+    public bool Selectable { get; set; } = false;
+
+    [Parameter]
+    public bool Selected { get; set; } = false;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public EventHandler? OnEditClick { get; set; }
+
+    [Parameter]
+    public EventHandler? OnDeleteClick { get; set; }
+
+    [Parameter]
+    public EventHandler? OnClick { get; set; }
+
+    [Parameter]
+    public EventHandler<bool>? OnSelectChanged { get; set; }
+
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="e"></param>
+    private void OnEditBtnClick(MouseEventArgs e) {
+        OnEditClick?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void OnDeleteBtnClick(MouseEventArgs e) {
+        OnDeleteClick?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void OnCardClick() {
+        if (Clickable) {
+            OnClick?.Invoke(this, EventArgs.Empty);
+            if (Selectable) {
+                Selected = !Selected;
+                OnSelectChanged?.Invoke(this, Selected);
+            }
+        }
+    }
+
+}

@@ -1,0 +1,28 @@
+﻿@page "/"
+@using Brandgroup.BlazorExtensions.Components
+@using Brandgroup.BlazorExtensions.Components.Bootstrap
+
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@attribute [StreamRendering]
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+<Record MiniTitle="Mini Title" Title="Title" Icon="bi bi-person" Selectable="true">
+</Record>
+
+<FormModal @ref="_testModal" Id="TestModal" Title="User Bearbeiten" ShowCloseButton="true" ShowCancelButton="true">
+    <button type="button" class="btn btn-primary">Test</button>
+</FormModal>
+
+<button class="btn btn-primary" type="button" @onclick="ShowModal">Show Modal</button>
+
+@code
+{
+    private FormModal? _testModal;
+
+    private async void ShowModal() {
+        await _testModal?.ShowAsync();
+    }
+}

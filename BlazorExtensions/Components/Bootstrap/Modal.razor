@@ -1,0 +1,66 @@
+﻿@using Microsoft.JSInterop
+
+@inject IJSRuntime JS
+
+<!-- Modal -->
+<div @ref="_modalElement" class="modal fade" id="@Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                @Header
+            </div>
+            <div class="modal-body">
+                @Body
+            </div>
+            <div class="modal-footer">
+                @Footer
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.openModal = (el) => {
+        //const instance = new bootstrap.Modal(document.getElementById(...)) // This didn't work because Blazor puts its empty comments in
+        const instance = bootstrap.Modal.getOrCreateInstance(el);
+        instance.show();
+    }
+    window.hideModal = (el) => {
+        //const instance = new bootstrap.Modal(document.getElementById(...)) // This didn't work because Blazor puts its empty comments in
+        const instance = bootstrap.Modal.getOrCreateInstance(el);
+        instance.hide();
+    }
+</script>
+
+
+
+@code {
+
+    [Parameter]
+    public string? Id { get; set; }
+
+    [Parameter]
+    public RenderFragment? Header { get; set; }
+
+    [Parameter]
+    public RenderFragment? Body { get; set; }
+
+    [Parameter]
+    public RenderFragment? Footer { get; set; }
+
+    private ElementReference _modalElement;
+
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public async Task ShowAsync() {
+        await JS.InvokeVoidAsync("openModal", _modalElement);
+    }
+
+    public async Task HideAsync() {
+        await JS.InvokeVoidAsync("hideModal", _modalElement);
+    }
+}
