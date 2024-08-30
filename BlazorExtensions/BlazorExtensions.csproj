@@ -25,11 +25,13 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <IsTrimmable>True</IsTrimmable>
+    <IsAotCompatible>True</IsAotCompatible>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <IsTrimmable>True</IsTrimmable>
     <DebugType>portable</DebugType>
+    <IsAotCompatible>True</IsAotCompatible>
   </PropertyGroup>
 
   <ItemGroup>
