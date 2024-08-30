@@ -20,14 +20,14 @@
 
     <!-- Card Body-->
     <div class="card-body pe-2">
-	    @ChildContent
+        @ChildContent
         <div class="d-flex flex-row-reverse gap-2">
 
             @* Remove Record button *@
             <button class="btn btn-outline-danger p-1" style="z-index: 2;" @onclick:stopPropagation="true" @onclick="OnDeleteBtnClick">
                 <div class="bi bi-trash h5 m-0 p-0"></div>
             </button>
-            
+
             @* Edit Record button *@
             <button class="btn btn-outline-primary p-1" style="z-index: 2;" @onclick:stopPropagation="true" @onclick="OnEditBtnClick">
                 <div class="bi bi-pencil h5 m-0 p-0"></div>
@@ -68,37 +68,37 @@
     public RenderFragment? ChildContent { get; set; }
 
     [Parameter]
-    public EventHandler? OnEditClick { get; set; }
+    public EventCallback? OnEditClick { get; set; }
 
     [Parameter]
-    public EventHandler? OnDeleteClick { get; set; }
+    public EventCallback? OnDeleteClick { get; set; }
 
     [Parameter]
-    public EventHandler? OnClick { get; set; }
+    public EventCallback? OnClick { get; set; }
 
     [Parameter]
-    public EventHandler<bool>? OnSelectChanged { get; set; }
+    public EventCallback<bool>? OnSelectChanged { get; set; }
 
 
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="e"></param>
-    private void OnEditBtnClick(MouseEventArgs e) {
-        OnEditClick?.Invoke(this, EventArgs.Empty);
+    private async Task OnEditBtnClick(MouseEventArgs e) {
+        await OnEditClick?.InvokeAsync();
     }
 
-    private void OnDeleteBtnClick(MouseEventArgs e) {
-        OnDeleteClick?.Invoke(this, EventArgs.Empty);
+    private async Task OnDeleteBtnClick(MouseEventArgs e) {
+        await OnDeleteClick?.InvokeAsync();
     }
 
-    private void OnCardClick() {
+    private async Task OnCardClick() {
         if (Clickable) {
-            OnClick?.Invoke(this, EventArgs.Empty);
+            await OnClick?.InvokeAsync();
             if (Selectable) {
                 Selected = !Selected;
-                OnSelectChanged?.Invoke(this, Selected);
+                await OnSelectChanged?.InvokeAsync();
             }
         }
     }

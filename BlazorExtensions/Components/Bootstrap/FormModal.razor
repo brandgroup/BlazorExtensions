@@ -39,10 +39,10 @@
     public string SaveButtonText { get; set; } = "Save";
 
     [Parameter]
-    public EventHandler? OnCancelClick { get; set; }
+    public EventCallback? OnCancelClick { get; set; }
 
     [Parameter]
-    public EventHandler? OnSaveClick { get; set; }
+    public EventCallback? OnSaveClick { get; set; }
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
@@ -58,8 +58,8 @@
     }
 
 
-    private void OnCancelBtnClick(MouseEventArgs e) {
-        OnCancelClick?.Invoke(this, EventArgs.Empty);
+    private async Task OnCancelBtnClick(MouseEventArgs e) {
+        await OnCancelClick?.InvokeAsync();
     }
 
 
@@ -67,7 +67,7 @@
     ///
     /// </summary>
     /// <param name="e"></param>
-    private void OnSaveBtnClick(MouseEventArgs e) {
-        OnSaveClick?.Invoke(this, EventArgs.Empty);
+    private async Task OnSaveBtnClick(MouseEventArgs e) {
+        await OnSaveClick?.InvokeAsync();
     }
 }
