@@ -68,16 +68,16 @@
     public RenderFragment? ChildContent { get; set; }
 
     [Parameter]
-    public EventCallback? OnEditClick { get; set; }
+    public EventCallback OnEditClick { get; set; }
 
     [Parameter]
-    public EventCallback? OnDeleteClick { get; set; }
+    public EventCallback OnDeleteClick { get; set; }
 
     [Parameter]
-    public EventCallback? OnClick { get; set; }
+    public EventCallback OnClick { get; set; }
 
     [Parameter]
-    public EventCallback<bool>? OnSelectChanged { get; set; }
+    public EventCallback<bool> OnSelectChanged { get; set; }
 
 
 
@@ -86,19 +86,19 @@
     /// </summary>
     /// <param name="e"></param>
     private async Task OnEditBtnClick(MouseEventArgs e) {
-        await OnEditClick?.InvokeAsync();
+        await OnEditClick.InvokeAsync();
     }
 
     private async Task OnDeleteBtnClick(MouseEventArgs e) {
-        await OnDeleteClick?.InvokeAsync();
+        await OnDeleteClick.InvokeAsync();
     }
 
     private async Task OnCardClick() {
         if (Clickable) {
-            await OnClick?.InvokeAsync();
+            await OnClick.InvokeAsync();
             if (Selectable) {
                 Selected = !Selected;
-                await OnSelectChanged?.InvokeAsync();
+                await OnSelectChanged.InvokeAsync(Selected);
             }
         }
     }
