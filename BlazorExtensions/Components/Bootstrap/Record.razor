@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Components.Web
+﻿@using Brandgroup.BlazorExtensions.Components.Events
+@using Microsoft.AspNetCore.Components.Web
 
 @{
     var styleString = Clickable ? "width: 18rem; cursor: pointer;" : "width: 18rem;";
@@ -68,17 +69,16 @@
     public RenderFragment? ChildContent { get; set; }
 
     [Parameter]
-    public EventCallback OnEditClick { get; set; }
+    public EventCallback<RecordEventArgs> OnEditClick { get; set; }
 
     [Parameter]
-    public EventCallback OnDeleteClick { get; set; }
+    public EventCallback<RecordEventArgs> OnDeleteClick { get; set; }
 
     [Parameter]
-    public EventCallback OnClick { get; set; }
+    public EventCallback<RecordEventArgs> OnClick { get; set; }
 
     [Parameter]
-    public EventCallback<bool> OnSelectChanged { get; set; }
-
+    public EventCallback<RecordSelectEventArgs> OnSelectChanged { get; set; }
 
 
     /// <summary>
@@ -86,11 +86,11 @@
     /// </summary>
     /// <param name="e"></param>
     private async Task OnEditBtnClick(MouseEventArgs e) {
-        await OnEditClick.InvokeAsync();
+        await OnEditClick.InvokeAsync(new RecordEventArgs(this));
     }
 
     private async Task OnDeleteBtnClick(MouseEventArgs e) {
-        await OnDeleteClick.InvokeAsync();
+        await OnDeleteClick.InvokeAsync(new RecordEventArgs(this));
     }
 
     private async Task OnCardClick() {
@@ -98,7 +98,7 @@
             await OnClick.InvokeAsync();
             if (Selectable) {
                 Selected = !Selected;
-                await OnSelectChanged.InvokeAsync(Selected);
+                await OnSelectChanged.InvokeAsync(new RecordSelectEventArgs(this, Selected));
             }
         }
     }
