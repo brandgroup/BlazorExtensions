@@ -1,9 +1,9 @@
 ﻿@using Microsoft.JSInterop
 
-@inject IJSRuntime JS
+@inject IJSRuntime Js
 
 <!-- Modal -->
-<div @ref="_modalElement" class="modal fade" id="@Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div @ref="_modalElement" class="modal fade @GetModalSizeClass()" id="@Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -40,6 +40,9 @@
     public string? Id { get; set; }
 
     [Parameter]
+    public ModalSize Size { get; set; } = ModalSize.Default;
+
+    [Parameter]
     public RenderFragment? Header { get; set; }
 
     [Parameter]
@@ -57,10 +60,19 @@
     /// </summary>
     /// <returns></returns>
     public async Task ShowAsync() {
-        await JS.InvokeVoidAsync("openModal", _modalElement);
+        await Js.InvokeVoidAsync("openModal", _modalElement);
     }
 
     public async Task HideAsync() {
-        await JS.InvokeVoidAsync("hideModal", _modalElement);
+        await Js.InvokeVoidAsync("hideModal", _modalElement);
+    }
+
+    private string GetModalSizeClass() {
+        return Size switch {
+            ModalSize.Small => "modal-sm",
+            ModalSize.Large => "modal-lg",
+            ModalSize.ExtraLarge => "modal-xl",
+            _ => ""
+        };
     }
 }

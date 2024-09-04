@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components.Web
-<Modal @ref="_modal" Id="@Id">
+<Modal @ref="_modal" Id="@Id" Size="@Size">
     <Header>
         <h1 class="modal-title fs-5" id="exampleModalLabel">@Title</h1>
         @if (ShowCloseButton) {
@@ -24,7 +24,11 @@
     [Parameter]
     public string? Id { get; set; }
 
-    [Parameter] public string Title { get; set; } = "";
+    [Parameter] 
+    public string Title { get; set; } = "";
+
+    [Parameter]
+    public ModalSize Size { get; set; } = ModalSize.Default;
 
     [Parameter]
     public bool ShowCloseButton { get; set; } = false;
