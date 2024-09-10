@@ -30,9 +30,11 @@
             </button>
 
             @* Edit Record button *@
-            <button class="btn btn-outline-primary p-1" style="z-index: 2;" @onclick:stopPropagation="true" @onclick="OnEditBtnClick">
-                <div class="bi bi-pencil h5 m-0 p-0"></div>
-            </button>
+            @if (Editable) {
+                <button class="btn btn-outline-primary p-1" style="z-index: 2;" @onclick:stopPropagation="true" @onclick="OnEditBtnClick">
+                    <div class="bi bi-pencil h5 m-0 p-0"></div>
+                </button>
+            }
         </div>
 
     </div>
@@ -100,7 +102,7 @@
 
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <returns></returns>
     private async Task OnCardClick() {
