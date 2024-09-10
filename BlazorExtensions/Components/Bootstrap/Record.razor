@@ -63,6 +63,9 @@
     public bool Selectable { get; set; } = false;
 
     [Parameter]
+    public bool Editable { get; set; } = false;
+
+    [Parameter]
     public bool Selected { get; set; } = false;
 
     [Parameter]
@@ -86,7 +89,8 @@
     /// </summary>
     /// <param name="e"></param>
     private async Task OnEditBtnClick(MouseEventArgs e) {
-        await OnEditClick.InvokeAsync(new RecordEventArgs(this));
+        if (Editable)
+            await OnEditClick.InvokeAsync(new RecordEventArgs(this));
     }
 
     private async Task OnDeleteBtnClick(MouseEventArgs e) {
