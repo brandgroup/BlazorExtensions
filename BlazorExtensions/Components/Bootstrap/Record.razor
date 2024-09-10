@@ -93,9 +93,15 @@
         await OnDeleteClick.InvokeAsync(new RecordEventArgs(this));
     }
 
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     private async Task OnCardClick() {
         if (Clickable) {
-            await OnClick.InvokeAsync();
+            await OnClick.InvokeAsync(new RecordEventArgs(this));
             if (Selectable) {
                 Selected = !Selected;
                 await OnSelectChanged.InvokeAsync(new RecordSelectEventArgs(this, Selected));
