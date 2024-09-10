@@ -1,0 +1,47 @@
+﻿@using Microsoft.JSInterop
+
+@inject IJSRuntime Js
+
+
+<div @ref="_modalElement" id="@Id" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+        @Header
+    </div>
+    <div class="toast-body">
+        @Body
+    </div>
+</div>
+
+<script>
+    window.showToast = (el) => {
+        const toast = bootstrap.Toast.getOrCreateInstance(el)
+        toast.show();
+    }
+    window.hideToast = (el) => {
+        const toast = new bootstrap.Toast.getOrCreateInstance(el)
+        toast.hide();
+    }
+</script>
+
+@code {
+
+    [Parameter]
+    public string? Id { get; set; }
+
+    [Parameter]
+    public bool Animation { get; set; } = true;
+
+    [Parameter]
+    public bool Autohide { get; set; } = true;
+
+    [Parameter]
+    public int Delay { get; set; } = 5000;
+
+    [Parameter]
+    public RenderFragment? Header { get; set; }
+
+    [Parameter]
+    public RenderFragment? Body { get; set; }
+
+    private ElementReference _modalElement;
+}

@@ -1,0 +1,34 @@
+﻿@using Microsoft.JSInterop
+
+@inject IJSRuntime Js
+
+@{
+    var toastPosition = Position switch {
+        ToastPosition.TopLeft => "top-0 start-0",
+        ToastPosition.TopCenter => "top-0 start-50",
+        ToastPosition.TopRight => "top-0 end-0",
+        ToastPosition.MiddleLeft => "top-50 start-0",
+        ToastPosition.MiddleCenter => "top-50 start-50",
+        ToastPosition.MiddleRight => "top-50 end-0",
+        ToastPosition.BottomLeft => "bottom-0 start-0",
+        ToastPosition.BottomCenter => "bottom-0 start-50",
+        ToastPosition.BottomRight => "bottom-0 end-0",
+        _ => "bottom-0 end-0"
+    };
+}
+
+<div class="toast-container position-fixed @toastPosition p-3">
+    @ChildContent
+</div>
+
+
+
+@code {
+
+    [Parameter]
+    public ToastPosition Position { get; set; } = ToastPosition.BottomRight;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+}
