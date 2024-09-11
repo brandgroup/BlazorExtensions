@@ -20,13 +20,45 @@
 
 <button class="btn btn-primary" type="button" @onclick="ShowModal">Show Modal</button>
 
+<button class="btn btn-primary" type="button" @onclick="ShowToast">Show Toast</button>
+
+<button class="btn btn-primary" type="button" @onclick="ShowAlertToast">Show AlertToast</button>
+
+<ToastContainer>
+    <Toast @ref="_toast" Autohide="true" Animation="false" Delay="4000">
+        <Header>
+            <strong class="me-auto">Bootstrap</strong>
+            <small>X mins ago</small>
+        </Header>
+        <Body>
+        Hello, world! This is a toast message.
+        </Body>
+    </Toast>
+    
+    <AlertToast @ref="_alertToast" BackgroundColor="BackgroundColor.Success" Message="Test" />
+</ToastContainer>
+
 @code
 {
     private FormModal? _testModal;
 
     private Modal? _modal;
 
+    private Toast? _toast;
+
+    private AlertToast? _alertToast;
+
     private async void ShowModal() {
         await _testModal?.ShowAsync();
+    }
+
+    private async void ShowToast()
+    {
+        await _toast?.ShowAsync();
+    }
+
+    private async void ShowAlertToast()
+    {
+        await _alertToast?.ShowAsync();
     }
 }

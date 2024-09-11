@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Brandgroup.BlazorExtensions.Components {
-    public enum ToastPosition {
+    public enum Position {
         TopLeft,
         TopCenter,
         TopRight,

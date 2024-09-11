@@ -4,15 +4,15 @@
 
 @{
     var toastPosition = Position switch {
-        ToastPosition.TopLeft => "top-0 start-0",
-        ToastPosition.TopCenter => "top-0 start-50",
-        ToastPosition.TopRight => "top-0 end-0",
-        ToastPosition.MiddleLeft => "top-50 start-0",
-        ToastPosition.MiddleCenter => "top-50 start-50",
-        ToastPosition.MiddleRight => "top-50 end-0",
-        ToastPosition.BottomLeft => "bottom-0 start-0",
-        ToastPosition.BottomCenter => "bottom-0 start-50",
-        ToastPosition.BottomRight => "bottom-0 end-0",
+        Position.TopLeft => "top-0 start-0",
+        Position.TopCenter => "top-0 start-50",
+        Position.TopRight => "top-0 end-0",
+        Position.MiddleLeft => "top-50 start-0",
+        Position.MiddleCenter => "top-50 start-50",
+        Position.MiddleRight => "top-50 end-0",
+        Position.BottomLeft => "bottom-0 start-0",
+        Position.BottomCenter => "bottom-0 start-50",
+        Position.BottomRight => "bottom-0 end-0",
         _ => "bottom-0 end-0"
     };
 }
@@ -26,7 +26,7 @@
 @code {
 
     [Parameter]
-    public ToastPosition Position { get; set; } = ToastPosition.BottomRight;
+    public Position Position { get; set; } = Position.BottomRight;
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }

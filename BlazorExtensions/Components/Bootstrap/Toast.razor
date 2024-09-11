@@ -2,11 +2,26 @@
 
 @inject IJSRuntime Js
 
+@{
+    var bgColor = BackgroundColor switch {
+        BackgroundColor.Primary => "text-bg-primary",
+        BackgroundColor.Secondary => "text-bg-secondary",
+        BackgroundColor.Success => "text-bg-success",
+        BackgroundColor.Danger => "text-bg-danger",
+        BackgroundColor.Warning => "text-bg-warning",
+        BackgroundColor.Info => "text-bg-info",
+        BackgroundColor.Light => "text-bg-light",
+        BackgroundColor.Dark => "text-bg-dark",
+        _ => ""
+    };
+}
 
-<div @ref="_modalElement" id="@Id" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
-        @Header
-    </div>
+<div @ref="_toastElement" id="@Id" class="toast @bgColor" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="@Delay" data-bs-animation="@(Animation ? "true" : "false")" data-bs-autohide="@(Autohide ? "true" : "false")">
+    @if (HasHeader) {
+        <div class="toast-header">
+            @Header
+        </div>
+    }
     <div class="toast-body">
         @Body
     </div>
@@ -38,10 +53,29 @@
     public int Delay { get; set; } = 5000;
 
     [Parameter]
+    public BackgroundColor BackgroundColor { get; set; } = BackgroundColor.Default;
+
+    [Parameter]
+    public bool HasHeader { get; set; } = true;
+
+    [Parameter]
     public RenderFragment? Header { get; set; }
 
     [Parameter]
     public RenderFragment? Body { get; set; }
 
-    private ElementReference _modalElement;
+    private ElementReference _toastElement;
+
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
+    public async Task ShowAsync() {
+        await Js.InvokeVoidAsync("showToast", _toastElement);
+    }
+
+    public async Task HideAsync() {
+        await Js.InvokeVoidAsync("hideToast", _toastElement);
+    }
 }
