@@ -1,4 +1,8 @@
-﻿@{
+﻿@using Microsoft.JSInterop
+
+@inject IJSRuntime Js
+
+@{
     var closeColor = BackgroundColor switch {
         BackgroundColor.Primary => "btn-close-white",
         BackgroundColor.Success => "btn-close-white",
