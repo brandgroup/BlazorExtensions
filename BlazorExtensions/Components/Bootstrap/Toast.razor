@@ -29,11 +29,11 @@
 
 <script>
     window.showToast = (el) => {
-        const toast = bootstrap.Toast.getInstance(el)
+        const toast = bootstrap.Toast.getOrCreateInstance(el)
         toast.show();
     }
     window.hideToast = (el) => {
-        const toast = bootstrap.Toast.getInstance(el)
+        const toast = bootstrap.Toast.getOrCreateInstance(el)
         toast.hide();
     }
 </script>
