@@ -22,12 +22,12 @@
 <script>
     window.openModal = (el) => {
         //const instance = new bootstrap.Modal(document.getElementById(...)) // This didn't work because Blazor puts its empty comments in
-        const instance = bootstrap.Modal.getOrCreateInstance(el);
+        const instance = bootstrap.Modal.getInstance(el);
         instance.show();
     }
     window.hideModal = (el) => {
         //const instance = new bootstrap.Modal(document.getElementById(...)) // This didn't work because Blazor puts its empty comments in
-        const instance = bootstrap.Modal.getOrCreateInstance(el);
+        const instance = bootstrap.Modal.getInstance(el);
         instance.hide();
     }
 </script>
