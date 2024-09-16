@@ -1,0 +1,54 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.JSInterop
+
+@inject IJSRuntime Js
+
+
+
+<InputFile @ref="_inputFileRef" @attributes="@CapturedAttributes" OnChange="@HandleFileSelection" multiple webkitdirectory />
+
+
+
+<script>
+    window.getFileList = (inputFile) => {
+        const fileList = [];
+
+        for (let i = 0; i < inputFile.files.length; i++) {
+            fileList.push(inputFile.files[i].webkitRelativePath);
+        }
+
+        return fileList;
+    };
+</script>
+
+
+
+
+@code {
+
+    private InputFile? _inputFileRef;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string,object>? CapturedAttributes { get; set; }
+
+    [Parameter]
+    public EventCallback<IEnumerable<BrowserFileWithPath>> OnFilesSelected { get; set; }
+
+
+    private async Task HandleFileSelection(InputFileChangeEventArgs evtArgs) {
+        if (_inputFileRef == null || !_inputFileRef.Element.HasValue) return;
+
+        //Invoke JavaScript from C#
+        var fileRelativePaths = await Js.InvokeAsync<string[]>("getFileList", _inputFileRef.Element.Value);
+
+        //Fetch files from InputFile
+        var files = evtArgs.GetMultipleFiles();
+
+        //Combine uploaded files with relative file paths
+        var browserFilesWithPaths = fileRelativePaths.ToList().Select((relativePath, index) => new BrowserFileWithPath(files[index], relativePath));
+
+        await OnFilesSelected.InvokeAsync(browserFilesWithPaths);
+    }
+
+    public record BrowserFileWithPath(IBrowserFile BrowserFile, string RelativePath);
+}

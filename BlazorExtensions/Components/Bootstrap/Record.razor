@@ -1,10 +1,14 @@
 ﻿@using Brandgroup.BlazorExtensions.Components.Events
 @using Microsoft.AspNetCore.Components.Web
 
+
+
 @{
     var styleString = Clickable ? "width: 18rem; cursor: pointer;" : "width: 18rem;";
     var cardSelectClass = Selected ? "border-dark border-2" : string.Empty;
 }
+
+
 
 <div class="card shadow-sm rounded-3 @cardSelectClass" style="@styleString" @onclick="OnCardClick">
     <!-- Card Header-->
