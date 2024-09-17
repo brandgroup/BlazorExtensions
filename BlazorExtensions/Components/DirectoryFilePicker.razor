@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Components.Forms
+﻿@using Brandgroup.BlazorExtensions.Components.Events
+@using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.JSInterop
 
 @inject IJSRuntime Js
@@ -32,7 +33,7 @@
     public Dictionary<string,object>? CapturedAttributes { get; set; }
 
     [Parameter]
-    public EventCallback<IEnumerable<BrowserFileWithPath>> OnFilesSelected { get; set; }
+    public EventCallback<FilePickerSelectedEventArgs> OnFilesSelected { get; set; }
 
 
     private async Task HandleFileSelection(InputFileChangeEventArgs evtArgs) {
@@ -47,7 +48,7 @@
         //Combine uploaded files with relative file paths
         var browserFilesWithPaths = fileRelativePaths.ToList().Select((relativePath, index) => new BrowserFileWithPath(files[index], relativePath));
 
-        await OnFilesSelected.InvokeAsync(browserFilesWithPaths);
+        await OnFilesSelected.InvokeAsync(new FilePickerSelectedEventArgs(browserFilesWithPaths));
     }
 
     public record BrowserFileWithPath(IBrowserFile BrowserFile, string RelativePath);
