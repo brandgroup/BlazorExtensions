@@ -33,6 +33,9 @@
     public Dictionary<string,object>? CapturedAttributes { get; set; }
 
     [Parameter]
+    public int MaximumFileCount { get; set; } = 10;
+
+    [Parameter]
     public EventCallback<FilePickerSelectedEventArgs> OnFilesSelected { get; set; }
 
 
@@ -43,7 +46,7 @@
         var fileRelativePaths = await Js.InvokeAsync<string[]>("getFileList", _inputFileRef.Element.Value);
 
         //Fetch files from InputFile
-        var files = evtArgs.GetMultipleFiles();
+        var files = evtArgs.GetMultipleFiles(MaximumFileCount);
 
         //Combine uploaded files with relative file paths
         var browserFilesWithPaths = fileRelativePaths.ToList().Select((relativePath, index) => new BrowserFileWithPath(files[index], relativePath));
