@@ -1,0 +1,77 @@
+﻿@using Microsoft.JSInterop
+
+@inject IJSRuntime Js
+
+@* An Alert is a contextual feedback message in response to user actions. *@
+@* It is usually displayed near the user action that triggered it or on the vertical edges of the screen. *@
+
+
+
+@{
+    var bgColor = AlertType switch {
+        BackgroundColor.Primary => "alert-primary",
+        BackgroundColor.Secondary => "alert-secondary",
+        BackgroundColor.Success => "alert-success",
+        BackgroundColor.Danger => "alert-danger",
+        BackgroundColor.Warning => "alert-warning",
+        BackgroundColor.Info => "alert-info",
+        BackgroundColor.Light => "alert-light",
+        BackgroundColor.Dark => "alert-dark",
+        _ => "alert-primary"
+    };
+}
+
+
+
+<div @ref="_alertElement" class="alert @bgColor" role="alert">
+    @if (HasHeader) {
+        <div class="alert-heading">
+            @Header
+        </div>
+    }
+    @Body
+</div>
+
+
+
+<script>
+    ﻿window.blazorExtensions = window.blazorExtensions || {};
+
+    window.blazorExtensions.alert = {
+            close: (el) => {
+                    const alert = bootstrap.Alert.getOrCreateInstance(el)
+                    alert.close();
+                }
+    }
+</script>
+
+
+
+@code {
+
+    private ElementReference _alertElement;
+
+    [Parameter]
+    public bool HasHeader { get; set; } = true;
+
+    [Parameter]
+    public RenderFragment? Header { get; set; }
+
+    [Parameter]
+    public BackgroundColor AlertType { get; set; } = BackgroundColor.Default;
+
+    [Parameter]
+    public RenderFragment? Body { get; set; }
+
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public async Task CloseAsync() {
+        await Js.InvokeVoidAsync("blazorExtensions.alert.close", _alertElement);
+    }
+
+}
+

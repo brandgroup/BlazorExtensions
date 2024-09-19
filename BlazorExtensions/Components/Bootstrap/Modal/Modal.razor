@@ -20,15 +20,19 @@
 </div>
 
 <script>
-    window.openModal = (el) => {
-        //const instance = new bootstrap.Modal(document.getElementById(...)) // This didn't work because Blazor puts its empty comments in
-        const instance = bootstrap.Modal.getOrCreateInstance(el);
-        instance.show();
-    }
-    window.hideModal = (el) => {
-        //const instance = new bootstrap.Modal(document.getElementById(...)) // This didn't work because Blazor puts its empty comments in
-        const instance = bootstrap.Modal.getOrCreateInstance(el);
-        instance.hide();
+    ﻿window.blazorExtensions = window.blazorExtensions || {};
+
+    window.blazorExtensions.modal = {
+            open: (el) => {
+                //const instance = new bootstrap.Modal(document.getElementById(...)) // This didn't work because Blazor puts its empty comments in
+                const instance = bootstrap.Modal.getOrCreateInstance(el);
+                instance.show();
+            },
+            hide: (el) => {
+                //const instance = new bootstrap.Modal(document.getElementById(...)) // This didn't work because Blazor puts its empty comments in
+                const instance = bootstrap.Modal.getOrCreateInstance(el);
+                instance.hide();
+            }
     }
 </script>
 
@@ -60,11 +64,11 @@
     /// </summary>
     /// <returns></returns>
     public async Task ShowAsync() {
-        await Js.InvokeVoidAsync("openModal", _modalElement);
+        await Js.InvokeVoidAsync("blazorExtensions.modal.open", _modalElement);
     }
 
     public async Task HideAsync() {
-        await Js.InvokeVoidAsync("hideModal", _modalElement);
+        await Js.InvokeVoidAsync("blazorExtensions.modal.hide", _modalElement);
     }
 
     private string GetModalSizeClass() {

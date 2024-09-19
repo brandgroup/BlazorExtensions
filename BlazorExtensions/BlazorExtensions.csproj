@@ -10,14 +10,14 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>Brandgroup.BlazorExtensions</PackageId>
     <Title>BlazorExtensions</Title>
-    <Version>1.2.2</Version>
+    <Version>1.3.0</Version>
     <Authors>Jan-Philipp Roslan</Authors>
     <Company>brandgroup</Company>
     <Product>Brandgroup.BlazorExtensions</Product>
     <RepositoryType>git</RepositoryType>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.2.2</AssemblyVersion>
-    <FileVersion>1.2.2</FileVersion>
+    <AssemblyVersion>1.3.0</AssemblyVersion>
+    <FileVersion>1.3.0</FileVersion>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageTags>Blazor; </PackageTags>

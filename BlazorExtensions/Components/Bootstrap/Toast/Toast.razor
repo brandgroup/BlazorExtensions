@@ -2,6 +2,11 @@
 
 @inject IJSRuntime Js
 
+@* A Toast is a component that pops up a notification to the user. *@
+@* Usually they show up at a corner of the screen and can automatically disappear after some time. *@
+@* It can be structured with a header and a body that are separated by a horizontal line. *@
+
+
 @{
     var bgColor = BackgroundColor switch {
         BackgroundColor.Primary => "text-bg-primary",
@@ -28,13 +33,17 @@
 </div>
 
 <script>
-    window.showToast = (el) => {
-        const toast = bootstrap.Toast.getOrCreateInstance(el)
-        toast.show();
-    }
-    window.hideToast = (el) => {
-        const toast = bootstrap.Toast.getOrCreateInstance(el)
-        toast.hide();
+    ﻿window.blazorExtensions = window.blazorExtensions || {};
+
+    window.blazorExtensions.toast = {
+            show: (el) => {
+                const toast = bootstrap.Toast.getOrCreateInstance(el)
+                toast.show();
+            },
+            hide: (el) => {
+                    const toast = bootstrap.Toast.getOrCreateInstance(el)
+                    toast.hide();
+                }
     }
 </script>
 
@@ -72,10 +81,10 @@
     /// </summary>
     /// <returns></returns>
     public async Task ShowAsync() {
-        await Js.InvokeVoidAsync("showToast", _toastElement);
+        await Js.InvokeVoidAsync("blazorExtensions.toast.show", _toastElement);
     }
 
     public async Task HideAsync() {
-        await Js.InvokeVoidAsync("hideToast", _toastElement);
+        await Js.InvokeVoidAsync("blazorExtensions.toast.hide", _toastElement);
     }
 }

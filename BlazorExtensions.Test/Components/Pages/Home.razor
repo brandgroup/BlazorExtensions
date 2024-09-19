@@ -1,6 +1,9 @@
 ﻿@page "/"
 @using Brandgroup.BlazorExtensions.Components
 @using Brandgroup.BlazorExtensions.Components.Bootstrap
+@using Brandgroup.BlazorExtensions.Components.Bootstrap.Alert
+@using Brandgroup.BlazorExtensions.Components.Bootstrap.Modal
+@using Brandgroup.BlazorExtensions.Components.Bootstrap.Toast
 
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 @attribute [StreamRendering]
@@ -24,6 +27,8 @@
 
 <button class="btn btn-primary" type="button" @onclick="ShowAlertToast">Show AlertToast</button>
 
+<button class="btn btn-primary" type="button" @onclick="ShowAlert">Close Alert</button>
+
 <Brandgroup.BlazorExtensions.Components.DirectoryFilePicker class="form-control"></Brandgroup.BlazorExtensions.Components.DirectoryFilePicker>
 
 <ToastContainer>
@@ -33,12 +38,21 @@
             <small>X mins ago</small>
         </Header>
         <Body>
-        Hello, world! This is a toast message.
+            Hello, world! This is a toast message.
         </Body>
     </Toast>
-    
+
     <AlertToast @ref="_alertToast" BackgroundColor="BackgroundColor.Success" Message="Test" />
 </ToastContainer>
+
+<Alert @ref="_alert">
+    <Header>
+        <h4>Test</h4>
+    </Header>
+    <Body>
+    Moin
+    </Body>
+</Alert>
 
 @code
 {
@@ -50,17 +64,21 @@
 
     private AlertToast? _alertToast;
 
-    private async void ShowModal() {
+    private Alert? _alert;
+
+    private async Task ShowModal() {
         await _testModal?.ShowAsync();
     }
 
-    private async void ShowToast()
-    {
+    private async Task ShowToast() {
         await _toast?.ShowAsync();
     }
 
-    private async void ShowAlertToast()
-    {
+    private async Task ShowAlertToast() {
         await _alertToast?.ShowAsync();
+    }
+
+    private async Task ShowAlert() {
+        await _alert.CloseAsync();
     }
 }

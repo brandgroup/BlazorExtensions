@@ -1,0 +1,97 @@
+﻿@using Microsoft.JSInterop
+
+@inject IJSRuntime Js
+
+
+
+@* A NotificationToast is a formatted version of a Toast that consists of a header with an icon, title, notification time and a close button *@
+@* The body contains the message that is displayed to the user. *@
+
+
+
+@{
+    var closeColor = BackgroundColor switch {
+        BackgroundColor.Primary => "btn-close-white",
+        BackgroundColor.Success => "btn-close-white",
+        _ => ""
+    };
+}
+
+
+
+<Toast Id="@Id" @ref="_toast" Autohide="@Autohide" Delay="@Delay" Animation="@Animation" BackgroundColor="@BackgroundColor" HasHeader="false">
+    <Body>
+        <div class="d-flex">
+            <div class="flex-fill">
+                @Message
+            </div>
+            <button type="button" class="btn-close @closeColor" data-bs-dismiss="toast" @onclick="@OnCloseClickCore"></button>
+        </div>
+    </Body>
+</Toast>
+
+
+
+@code {
+
+    private Toast? _toast;
+
+    [Parameter]
+    public string? Id { get; set; }
+
+    [Parameter]
+    public string Message { get; set; } = "";
+
+    [Parameter]
+    public bool Animation { get; set; } = true;
+
+    [Parameter]
+    public bool Autohide { get; set; } = true;
+
+    [Parameter]
+    public int Delay { get; set; } = 5000;
+
+    [Parameter]
+    public bool Dismissable { get; set; } = false;
+
+    [Parameter]
+    public BackgroundColor BackgroundColor { get; set; } = BackgroundColor.Default;
+
+    [Parameter]
+    public EventCallback OnCloseClick { get; set; }
+
+
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
+    public async Task ShowAsync() {
+        if (_toast != null) {
+            await _toast.ShowAsync();
+        }
+    }
+
+
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
+    public async Task HideAsync() {
+        if (_toast != null) {
+            await _toast.HideAsync();
+        }
+    }
+
+
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnCloseClickCore() {
+        await OnCloseClick.InvokeAsync(null);
+    }
+
+}
