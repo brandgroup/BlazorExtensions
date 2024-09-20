@@ -1,6 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components.Web
 
-
 @{
     var acceptBgColor = AcceptButtonColor switch {
         BackgroundColor.Primary => "btn-primary",
@@ -29,7 +28,7 @@
 
 
 
-<Modal @ref="_modal" Id="@Id" Size="@Size">
+<Modal @ref="_modal" Id="@Id" Size="@Size" Center="@Center">
     <Header>
         <h1 class="modal-title fs-5" id="labelDialogModal">@Title</h1>
         @if (ShowCloseButton) {
@@ -65,6 +64,9 @@
 
     [Parameter]
     public ModalSize Size { get; set; } = ModalSize.Default;
+
+    [Parameter]
+    public bool Center { get; set; } = false;
 
     [Parameter]
     public bool ShowCloseButton { get; set; } = false;

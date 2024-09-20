@@ -8,7 +8,7 @@
 
 
 @{
-    var bgColor = AlertType switch {
+    var bgColor = Type switch {
         BackgroundColor.Primary => "alert-primary",
         BackgroundColor.Secondary => "alert-secondary",
         BackgroundColor.Success => "alert-success",
@@ -58,7 +58,7 @@
     public RenderFragment? Header { get; set; }
 
     [Parameter]
-    public BackgroundColor AlertType { get; set; } = BackgroundColor.Default;
+    public BackgroundColor Type { get; set; } = BackgroundColor.Default;
 
     [Parameter]
     public RenderFragment? Body { get; set; }

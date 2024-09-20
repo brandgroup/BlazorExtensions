@@ -2,9 +2,13 @@
 
 @inject IJSRuntime Js
 
+@{
+    var modalCenter = Center ? "modal-dialog-centered" : "";
+}
+
 <!-- Modal -->
 <div @ref="_modalElement" class="modal fade @GetModalSizeClass()" id="@Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog @modalCenter">
         <div class="modal-content">
             <div class="modal-header">
                 @Header
@@ -45,6 +49,9 @@
 
     [Parameter]
     public ModalSize Size { get; set; } = ModalSize.Default;
+
+    [Parameter]
+    public bool Center { get; set; } = true;
 
     [Parameter]
     public RenderFragment? Header { get; set; }
