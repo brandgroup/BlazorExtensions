@@ -21,6 +21,9 @@
     <button type="button" class="btn btn-primary">Test</button>
 </FormModal>
 
+<DialogModal @ref="_dialogModal" Title="Test" ShowCancelButton="true" ShowCloseButton="true" AcceptButtonColor="BackgroundColor.Danger" Message="Test">
+</DialogModal>
+
 <button class="btn btn-primary" type="button" @onclick="ShowModal">Show Modal</button>
 
 <button class="btn btn-primary" type="button" @onclick="ShowToast">Show Toast</button>
@@ -28,6 +31,8 @@
 <button class="btn btn-primary" type="button" @onclick="ShowAlertToast">Show AlertToast</button>
 
 <button class="btn btn-primary" type="button" @onclick="ShowAlert">Close Alert</button>
+
+<button class="btn btn-primary" type="button" @onclick="ShowDialogModal">Show DialogModal</button>
 
 <Brandgroup.BlazorExtensions.Components.DirectoryFilePicker class="form-control"></Brandgroup.BlazorExtensions.Components.DirectoryFilePicker>
 
@@ -58,6 +63,8 @@
 {
     private FormModal? _testModal;
 
+    private DialogModal? _dialogModal;
+
     private Modal? _modal;
 
     private Toast? _toast;
@@ -80,5 +87,9 @@
 
     private async Task ShowAlert() {
         await _alert.CloseAsync();
+    }
+
+    private async Task ShowDialogModal() {
+        await _dialogModal?.ShowAsync();
     }
 }

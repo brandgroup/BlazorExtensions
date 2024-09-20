@@ -1,0 +1,122 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+
+
+@{
+    var acceptBgColor = AcceptButtonColor switch {
+        BackgroundColor.Primary => "btn-primary",
+        BackgroundColor.Secondary => "btn-secondary",
+        BackgroundColor.Success => "btn-success",
+        BackgroundColor.Danger => "btn-danger",
+        BackgroundColor.Warning => "btn-warning",
+        BackgroundColor.Info => "btn-info",
+        BackgroundColor.Light => "btn-light",
+        BackgroundColor.Dark => "btn-dark",
+        _ => "btn-primary"
+    };
+
+    var cancelBgColor = CancelButtonColor switch {
+        BackgroundColor.Primary => "btn-primary",
+        BackgroundColor.Secondary => "btn-secondary",
+        BackgroundColor.Success => "btn-success",
+        BackgroundColor.Danger => "btn-danger",
+        BackgroundColor.Warning => "btn-warning",
+        BackgroundColor.Info => "btn-info",
+        BackgroundColor.Light => "btn-light",
+        BackgroundColor.Dark => "btn-dark",
+        _ => "btn-primary"
+    };
+}
+
+
+
+<Modal @ref="_modal" Id="@Id" Size="@Size">
+    <Header>
+        <h1 class="modal-title fs-5" id="labelDialogModal">@Title</h1>
+        @if (ShowCloseButton) {
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        }
+    </Header>
+    <Body>
+        @* TODO: Icon *@
+
+        @if (MessageContent == null) {
+            @Message
+        } else {
+            @MessageContent
+        }
+    </Body>
+    <Footer>
+        @if (ShowCancelButton) {
+            <button type="button" class="btn @cancelBgColor" data-bs-dismiss="modal">@CancelButtonText</button>
+        }
+        <button type="button" class="btn @acceptBgColor" @onclick="OnAcceptBtnClick">@AcceptButtonText</button>
+    </Footer>
+</Modal>
+
+
+
+@code {
+
+    [Parameter]
+    public string? Id { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = "";
+
+    [Parameter]
+    public ModalSize Size { get; set; } = ModalSize.Default;
+
+    [Parameter]
+    public bool ShowCloseButton { get; set; } = false;
+
+    [Parameter]
+    public bool ShowCancelButton { get; set; } = false;
+
+    [Parameter]
+    public string CancelButtonText { get; set; } = "Cancel";
+
+    [Parameter]
+    public BackgroundColor CancelButtonColor { get; set; } = BackgroundColor.Secondary;
+
+    [Parameter]
+    public string AcceptButtonText { get; set; } = "Accept";
+
+    [Parameter]
+    public BackgroundColor AcceptButtonColor { get; set; } = BackgroundColor.Primary;
+
+    [Parameter]
+    public EventCallback OnCancelClick { get; set; }
+
+    [Parameter]
+    public EventCallback OnAcceptClick { get; set; }
+
+    [Parameter]
+    public string? Message { get; set; }
+
+    [Parameter]
+    public RenderFragment? MessageContent { get; set; }
+
+    private Modal? _modal;
+
+    public async Task ShowAsync() {
+        if (_modal != null) await _modal.ShowAsync();
+    }
+
+    public async Task HideAsync() {
+        if (_modal != null) await _modal.HideAsync();
+    }
+
+
+    private async Task OnCancelBtnClick(MouseEventArgs e) {
+        await OnCancelClick.InvokeAsync();
+    }
+
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="e"></param>
+    private async Task OnAcceptBtnClick(MouseEventArgs e) {
+        await OnAcceptClick.InvokeAsync();
+    }
+}
