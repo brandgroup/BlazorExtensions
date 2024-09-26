@@ -14,7 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BlazorExtensions\BlazorExtensions.csproj" />
+    <ProjectReference Include="..\BlazorExtensions.Bootstrap\BlazorExtensions.Bootstrap.csproj" />
+    <ProjectReference Include="..\BlazorExtensions\BlazorExtensions.Bootstrap.csproj" />
   </ItemGroup>
 
 </Project>
