@@ -4,7 +4,7 @@
 
 
 @{
-    var styleString = Clickable ? "width: 18rem; cursor: pointer;" : "width: 18rem;";
+    var styleString = Clickable ? "cursor: pointer;" : "";
     var cardSelectClass = Selected ? "border-dark border-2" : string.Empty;
 
     var bgColor = Color switch {
@@ -21,41 +21,41 @@
 }
 
 
-
-<div class="card shadow-sm rounded-3 @cardSelectClass @bgColor" style="@styleString" @onclick="OnCardClick">
-    <!-- Card Header-->
-    <div class="card-header p-1 ps-3 pt-2 pe-2">
-        <div class="d-flex align-items-center m-0 p-0">
-            <div class="d-flex me-auto align-items-center">
-                <div class="text-seconardy m-0" style="font-size: 0.75rem;">@MiniTitle</div>
-                <h5 class="m-0">@Title</h5>
-            </div>
-            <div class="bi @Icon h3 m-0 p-0">
+<div @attributes="AdditionalAttributes">
+    <div class="card shadow-sm rounded-3 @cardSelectClass @bgColor" style="@styleString" @onclick="OnCardClick">
+        <!-- Card Header-->
+        <div class="card-header p-1 ps-3 pt-2 pe-2">
+            <div class="d-flex align-items-center m-0 p-0">
+                <div class="d-flex me-auto align-items-center">
+                    <div class="text-seconardy m-0" style="font-size: 0.75rem;">@MiniTitle</div>
+                    <h5 class="m-0">@Title</h5>
+                </div>
+                <div class="bi @Icon h3 m-0 p-0">
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Card Body-->
-    <div class="card-body pe-2">
-        @ChildContent
-        <div class="d-flex flex-row-reverse gap-2">
+        <!-- Card Body-->
+        <div class="card-body pe-2">
+            @ChildContent
+            <div class="d-flex flex-row-reverse gap-2">
 
-            @* Remove Record button *@
-            <button class="btn btn-outline-danger p-1" style="z-index: 2;" @onclick:stopPropagation="true" @onclick="OnDeleteBtnClick">
-                <div class="bi bi-trash h5 m-0 p-0"></div>
-            </button>
-
-            @* Edit Record button *@
-            @if (Editable) {
-                <button class="btn btn-outline-primary p-1" style="z-index: 2;" @onclick:stopPropagation="true" @onclick="OnEditBtnClick">
-                    <div class="bi bi-pencil h5 m-0 p-0"></div>
+                @* Remove Record button *@
+                <button class="btn btn-outline-danger p-1" style="z-index: 2;" @onclick:stopPropagation="true" @onclick="OnDeleteBtnClick">
+                    <div class="bi bi-trash h5 m-0 p-0"></div>
                 </button>
-            }
-        </div>
 
+                @* Edit Record button *@
+                @if (Editable) {
+                    <button class="btn btn-outline-primary p-1" style="z-index: 2;" @onclick:stopPropagation="true" @onclick="OnEditBtnClick">
+                        <div class="bi bi-pencil h5 m-0 p-0"></div>
+                    </button>
+                }
+            </div>
+
+        </div>
     </div>
 </div>
-
 
 
 @code {
@@ -75,7 +75,7 @@
     public string Icon { get; set; } = string.Empty;
 
     [Parameter]
-    public BackgroundColor Color {get; set;} 
+    public BackgroundColor Color { get; set; }
 
     [Parameter]
     public bool Clickable { get; set; } = false;
@@ -104,6 +104,9 @@
     [Parameter]
     public EventCallback<RecordSelectEventArgs> OnSelectChanged { get; set; }
 
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object>? AdditionalAttributes { get; set; }
+
 
     /// <summary>
     ///
@@ -117,7 +120,7 @@
 
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="e"></param>
     /// <returns></returns>
