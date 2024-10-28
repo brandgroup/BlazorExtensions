@@ -6,11 +6,23 @@
 @{
     var styleString = Clickable ? "width: 18rem; cursor: pointer;" : "width: 18rem;";
     var cardSelectClass = Selected ? "border-dark border-2" : string.Empty;
+
+    var bgColor = Color switch {
+        BackgroundColor.Primary => "text-bg-primary",
+        BackgroundColor.Secondary => "text-bg-secondary",
+        BackgroundColor.Success => "text-bg-success",
+        BackgroundColor.Danger => "text-bg-danger",
+        BackgroundColor.Warning => "text-bg-warning",
+        BackgroundColor.Info => "text-bg-info",
+        BackgroundColor.Light => "text-bg-light",
+        BackgroundColor.Dark => "text-bg-dark",
+        _ => "text-bg-light"
+    };
 }
 
 
 
-<div class="card shadow-sm rounded-3 @cardSelectClass" style="@styleString" @onclick="OnCardClick">
+<div class="card shadow-sm rounded-3 @cardSelectClass @bgColor" style="@styleString" @onclick="OnCardClick">
     <!-- Card Header-->
     <div class="card-header p-1 ps-3 pt-2 pe-2">
         <div class="d-flex align-items-center m-0 p-0">
@@ -63,6 +75,9 @@
     public string Icon { get; set; } = string.Empty;
 
     [Parameter]
+    public BackgroundColor Color {get; set;} 
+
+    [Parameter]
     public bool Clickable { get; set; } = false;
 
     [Parameter]
@@ -99,6 +114,13 @@
             await OnEditClick.InvokeAsync(new RecordEventArgs(this));
     }
 
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="e"></param>
+    /// <returns></returns>
     private async Task OnDeleteBtnClick(MouseEventArgs e) {
         await OnDeleteClick.InvokeAsync(new RecordEventArgs(this));
     }
