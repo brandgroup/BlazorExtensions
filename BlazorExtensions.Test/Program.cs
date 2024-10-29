@@ -1,4 +1,4 @@
-using Brandgroup.BlazorExtensions.Test.Components;
+using Brandgroup.BlazorExtensions.Test;
 using Microsoft.AspNetCore.Authentication.Negotiate;
 using DevExpress.Blazor;
 

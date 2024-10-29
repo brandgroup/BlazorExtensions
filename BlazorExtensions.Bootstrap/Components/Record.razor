@@ -18,6 +18,11 @@
         BackgroundColor.Dark => "text-bg-dark",
         _ => "text-bg-light"
     };
+
+    var btnDeleteColor = Color switch {
+        BackgroundColor.Danger => "btn-outline-light",
+        _ => "btn-outline-danger"
+    };
 }
 
 
@@ -41,7 +46,7 @@
             <div class="d-flex flex-row-reverse gap-2">
 
                 @* Remove Record button *@
-                <button class="btn btn-outline-danger p-1" style="z-index: 2;" @onclick:stopPropagation="true" @onclick="OnDeleteBtnClick">
+                <button class="btn @btnDeleteColor p-1" style="z-index: 2;" @onclick:stopPropagation="true" @onclick="OnDeleteBtnClick">
                     <div class="bi bi-trash h5 m-0 p-0"></div>
                 </button>
 
