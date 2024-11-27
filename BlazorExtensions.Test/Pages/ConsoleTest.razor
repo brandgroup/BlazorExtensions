@@ -1,0 +1,57 @@
+﻿@page "/consoletest"
+
+
+
+@using System.Collections.ObjectModel
+@using Brandgroup.BlazorExtensions.Components.Console
+
+
+
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@attribute [StreamRendering]
+
+<PageTitle>Console</PageTitle>
+
+<div class="container-fluid subpage subpage-padded">
+    <Console Class="h-100 overflow-y-scroll" Items="@_items">
+
+    </Console>
+
+    <button class="btn btn-primary" type="button" @onclick="OnLineAddClick">Add row</button>
+</div>
+
+
+
+@code {
+
+
+    private readonly ObservableCollection<ConsoleLine> _items = [];
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _items.Add(new ConsoleLine("Jo, Test", "green"));
+
+        var t = new System.Timers.Timer();
+
+        t.Interval = 50;
+
+        t.Elapsed += (s, e) =>
+        {
+            _items.Add(new ConsoleLine("Jo, Test", "green"));
+        };
+
+        t.Start();
+    }
+
+    private void OnLineAddClick()
+    {
+        // Create a new ConsoleLine with multiple text parts, one green and one blue
+        var cLine = new ConsoleLine();
+        cLine.Parts.Add(new ConsoleTextPart("Jo, Test", "green"));
+        cLine.Parts.Add(new ConsoleTextPart("Hallo Button", "blue"));
+
+        _items.Add(cLine);
+    }
+
+}

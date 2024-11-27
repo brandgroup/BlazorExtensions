@@ -3,8 +3,8 @@
 @using Brandgroup.BlazorExtensions.Bootstrap.Components.Alert
 @using Brandgroup.BlazorExtensions.Bootstrap.Components.Modal
 @using Brandgroup.BlazorExtensions.Bootstrap.Components.Toast
-@using Brandgroup.BlazorExtensions.Bootstrap.Components
-@using Microsoft.AspNetCore.Components.Web
+@using Brandgroup.BlazorExtensions.Components.DirectoryFilePicker
+@using Brandgroup.BlazorExtensions.Bootstrap.Components.Record
 
 
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
@@ -36,7 +36,7 @@
 
 <button class="btn btn-primary" type="button" @onclick="ShowDialogModal">Show DialogModal</button>
 
-<Brandgroup.BlazorExtensions.Components.DirectoryFilePicker class="form-control"></Brandgroup.BlazorExtensions.Components.DirectoryFilePicker>
+<DirectoryFilePicker OnFilesSelected="@OnFilesSelected" @rendermode="InteractiveServer" MaximumFileCount="600" class="form-control"></DirectoryFilePicker>
 
 <ToastContainer>
     <Toast @ref="_toast" Autohide="true" Animation="false" Delay="4000">
@@ -57,9 +57,11 @@
         <h4>Test</h4>
     </Header>
     <Body>
-    Moin
+        Moin
     </Body>
 </Alert>
+
+
 
 @code
 {
@@ -75,23 +77,33 @@
 
     private Alert? _alert;
 
-    private async Task ShowModal() {
+    private async Task ShowModal()
+    {
         await _modal?.ShowAsync();
     }
 
-    private async Task ShowToast() {
+    private async Task ShowToast()
+    {
         await _toast?.ShowAsync();
     }
 
-    private async Task ShowAlertToast() {
+    private async Task ShowAlertToast()
+    {
         await _alertToast?.ShowAsync();
     }
 
-    private async Task ShowAlert() {
+    private async Task ShowAlert()
+    {
         await _alert.CloseAsync();
     }
 
-    private async Task ShowDialogModal() {
+    private async Task ShowDialogModal()
+    {
         await _dialogModal?.ShowAsync();
+    }
+
+    private void OnFilesSelected(FilePickerSelectedEventArgs evtArgs)
+    {
+
     }
 }

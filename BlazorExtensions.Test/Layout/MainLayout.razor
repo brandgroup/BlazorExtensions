@@ -1,20 +1,60 @@
-﻿@inherits LayoutComponentBase
+﻿@using Brandgroup.BlazorExtensions.Bootstrap
+@using Microsoft.Extensions.Options
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+@inherits LayoutComponentBase
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+@* This is the root element of the whole Web Application *@
+@* It has its own css class (.page) in MainLayout.razor.css *@
+@* It is a flexbox with 100% viewport height and is needed to dynamically position the navbar and the rest of the app on the screen*@
+@* It has relative position for TODO *@
+@* Its flex direction is dependent on the size of the viewport (flex-direction-row when big; flex-direction-column when small) *@
+<div class="page vh-100">
+
+            @* This is the Navigation menu. *@
+            @* When the ViewPort is small (<641px) it is shown on the top, otherwise on the left *@
+            <div class="sidebar flex-shrink-0">
+                <NavMenu />
+            </div>
+
+            @* This is the flex box for the actual content on the screen.*@
+            @* It includes the Header, the main content and the footer. *@
+            @* It is its own flex box to not interfere with the root flexbox whose sole purpose it to dynamically position the navbar and the rest of the app on the screen. *@
+            @* This flexbox here does not dynamically change its direction and positions its elements vertically (flex-column) *@
+            @* It fills the rest of the space inside its parent flexbox (flex-grow-1) and hides its own overflow to leave that to its children (overflow-hidden)*@
+            <div class="flex-grow-1 overflow-hidden d-flex flex-column">
+
+                @* This is the Header at the top of the screen *@
+                @* It has its own css class in MainLayout.razor.css to color it and adjusts its items position (also its actually its own flexbox)*@
+                <div class="top-row px-4" style="min-height:56px;">
+                    <a href="https://brand-group.com/" target="_blank">Über</a>
+                </div>
+
+                @* This is the main-HTML tag to signify the main content *@
+                @* It has its own css class in MainLayout.razor.css that make fill its parent flexbox (flow-grow-1) and TOOD (flex-shrink-1) (flex-basis-0) *@
+                <main class="overflow-hidden">
+
+                    @* This is the main article that displays the currently loaded page *@
+                    @* It fills all the available vertical space inside the parent (h-100) *@
+                    @* It hides it own overflow and lets its children overflow (overflow-hidden) *@
+                    <article class="content overflow-hidden h-100">
+                        @Body
+                    </article>
+
+                </main>
+
+                @* This is the footer at the bottom of every page *@
+                @* It is a flex container to align its items. They are aligned in reverse to start on the right side. *@
+                <div class="px-2 flex-shrink-0 border-top border-2 d-flex flex-row-reverse" style="min-height: 20px;">
+                    <div class="text-secondary p-0 m-0">DEMO</div>
+                </div>
+
+
+
+            </div>
+
 </div>
+
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.

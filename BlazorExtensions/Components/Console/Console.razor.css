@@ -1,0 +1,15 @@
+﻿.log-container {
+    border-radius: 5px;
+    background-color: #242424;
+    padding-left: 12px;
+}
+
+
+.log-line {
+    font-size: 12px;
+    font-family: 'Cascadia Code';
+}
+
+.log-text-part {
+
+}

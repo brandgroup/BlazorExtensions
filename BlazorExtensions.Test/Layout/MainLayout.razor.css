@@ -1,3 +1,6 @@
+/* This is the default MainLayout.razor.css that Visual Studio creates when creating a new 'Blazor Web App' applcation with .NET 8 */
+/* This file was edited for the purpose of the BlazorTemplate by brandgroup. */
+
 .page {
     position: relative;
     display: flex;
@@ -27,24 +30,29 @@ main {
         text-decoration: none;
     }
 
-    .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-        text-decoration: underline;
-    }
+        .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
+            text-decoration: underline;
+        }
 
-    .top-row ::deep a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+        .top-row ::deep a:first-child {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+/* These css classes are dynamic and will become active if the max-width is <= 640.98px */
 
 @media (max-width: 640.98px) {
     .top-row {
         justify-content: space-between;
     }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        margin-left: 0;
-    }
+        .top-row ::deep a, .top-row ::deep .btn-link {
+            margin-left: 0;
+        }
 }
+
+/* These css classes are dynamic and will become active if the min-width is >= 641px */
+
 
 @media (min-width: 641px) {
     .page {
@@ -64,13 +72,13 @@ main {
         z-index: 1;
     }
 
-    .top-row.auth ::deep a:first-child {
-        flex: 1;
-        text-align: right;
-        width: 0;
-    }
+        .top-row.auth ::deep a:first-child {
+            flex: 1;
+            text-align: right;
+            width: 0;
+        }
 
-    .top-row, article {
+    .top-row, /* article */ { /* Microsoft set the padding of the content here, which makes no sense since it restricts us on the pages. A page developer should be able to manually adjust this. */
         padding-left: 2rem !important;
         padding-right: 1.5rem !important;
     }

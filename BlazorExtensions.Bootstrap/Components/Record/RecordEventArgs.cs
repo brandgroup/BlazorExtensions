@@ -1,4 +1,4 @@
-﻿namespace Brandgroup.BlazorExtensions.Bootstrap.Events;
+﻿namespace Brandgroup.BlazorExtensions.Bootstrap.Components;
 
 
 
@@ -6,8 +6,7 @@
 /// 
 /// </summary>
 /// <param name="record"></param>
-public class RecordEventArgs(object record) : EventArgs
-{
+public class RecordEventArgs(object record) : EventArgs {
 
 
 

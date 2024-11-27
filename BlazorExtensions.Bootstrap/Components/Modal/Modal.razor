@@ -67,19 +67,23 @@
 
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <returns></returns>
-    public async Task ShowAsync() {
+    public async Task ShowAsync()
+    {
         await Js.InvokeVoidAsync("blazorExtensions.modal.open", _modalElement);
     }
 
-    public async Task HideAsync() {
+    public async Task HideAsync()
+    {
         await Js.InvokeVoidAsync("blazorExtensions.modal.hide", _modalElement);
     }
 
-    private string GetModalSizeClass() {
-        return Size switch {
+    private string GetModalSizeClass()
+    {
+        return Size switch
+        {
             ModalSize.Small => "modal-sm",
             ModalSize.Large => "modal-lg",
             ModalSize.ExtraLarge => "modal-xl",
