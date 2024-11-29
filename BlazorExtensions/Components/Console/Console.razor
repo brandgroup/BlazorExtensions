@@ -2,19 +2,27 @@
 
 @implements IDisposable
 
-
+@* A component that shows text entries in a console-like view environment. *@
+@* Text lines are delivered either by setting the 'Items' property to an IEnumerable<string> or IEnumerable<ConsoleLine> *@
+@* The 'Items' property supports collections that implement INotifyCollectionChanged. *@
+@* TODO: Currently, to be thread-sfe, this component uses a lock to keep the internal collection undisturbed, while rendering *@
+@* TODO: This currently costs a little performance and much memory because we effectively have two copies of the delivered information (both in 'Items' and '_internalCollection')*@
 
 <div class="log-container @Class">
-    @foreach (var logMessage in _internalCollection)
+
+    @lock (_internalCollectionLock)
     {
-        <div class="log-line">
-            @foreach (var textPart in logMessage.Parts)
-            {
-                <span class="log-text-part" style="color: @(textPart.Color ?? "rgb(204, 204, 204)")">
-                    @textPart.Text
-                </span>
-            }
-        </div>
+        @foreach (var logMessage in _internalCollection)
+        {
+            <div class="log-line">
+                @foreach (var textPart in logMessage.Parts)
+                {
+                    <span class="log-text-part" style="color: @(textPart.Color ?? "rgb(204, 204, 204)")">
+                        @textPart.Text
+                    </span>
+                }
+            </div>
+        }
     }
 </div>
 
@@ -50,7 +58,7 @@
 
     private IList<ConsoleLine> _internalCollection;
 
-
+    private readonly object _internalCollectionLock = new();
 
     /// <summary>
     ///
@@ -85,8 +93,7 @@
             coll.CollectionChanged -= OnItemCollectionChanged;
         }
 
-        // Clear the internal collection
-        _internalCollection.Clear();
+        // We do not clear the internal collection, because it will be overwritten in the OnItemsChanged method
     }
 
 
@@ -97,21 +104,20 @@
     private void OnItemsChanged()
     {
         // The Items property has changed
-
-
         switch (Items)
         {
             // First, we check if the new Items property is an IEnumerable<string> that we can use to render the log messages
             case IEnumerable<string> coll:
                 {
                     var consoleLines = ConvertStringsToConsoleLines(coll);
-                    _internalCollection = consoleLines;
+                    _internalCollection = consoleLines.ToList();
                     break;
                 }
             case IEnumerable<ConsoleLine> coll:
                 _internalCollection = coll.ToList();
                 break;
         }
+
 
         // If the new Items property is also an INotifyCollectionChanged, we subscribe to the CollectionChanged event
         if (_items is INotifyCollectionChanged notifyCollection)
@@ -127,9 +133,9 @@
     /// </summary>
     /// <param name="collection"></param>
     /// <returns></returns>
-    private IList<ConsoleLine> ConvertStringsToConsoleLines(IEnumerable<string> collection)
+    private IEnumerable<ConsoleLine> ConvertStringsToConsoleLines(IEnumerable<string> collection)
     {
-        return collection.Select(x => new ConsoleLine(x)).ToList();
+        return collection.Select(x => new ConsoleLine(x));
     }
 
 
@@ -145,27 +151,28 @@
         {
             // Check if new items have been added, if yes, add them to the internal collection
             case NotifyCollectionChangedAction.Add:
-            {
-                foreach (var item in evtArgs.NewItems!)
                 {
-                    switch (item)
+                    lock (_internalCollectionLock)
                     {
-                        case string str:
-                            _internalCollection.Add(new ConsoleLine(str));
-                            break;
-                        case ConsoleLine line:
-                            _internalCollection.Add(line);
-                            break;
+                        foreach (var item in evtArgs.NewItems!)
+                        {
+                            switch (item)
+                            {
+                                case string str:
+                                    _internalCollection.Add(new ConsoleLine(str));
+                                    break;
+                                case ConsoleLine line:
+                                    _internalCollection.Add(line);
+                                    break;
+                            }
+                        }
                     }
+                    break;
                 }
-
-                break;
-            }
             // Check if items have been removed, if yes, remove them from the internal collection
             case NotifyCollectionChangedAction.Remove:
                 break;
         }
-
 
         InvokeAsync(StateHasChanged);
     }

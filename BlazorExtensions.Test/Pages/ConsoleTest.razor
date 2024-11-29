@@ -1,11 +1,7 @@
 ﻿@page "/consoletest"
 
-
-
 @using System.Collections.ObjectModel
 @using Brandgroup.BlazorExtensions.Components.Console
-
-
 
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 @attribute [StreamRendering]
@@ -34,7 +30,7 @@
 
         var t = new System.Timers.Timer();
 
-        t.Interval = 50;
+        t.Interval = 5;
 
         t.Elapsed += (s, e) =>
         {
