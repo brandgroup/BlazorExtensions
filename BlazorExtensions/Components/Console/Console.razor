@@ -1,14 +1,19 @@
 ﻿@using System.Collections.Specialized
+@using Microsoft.JSInterop
 
 @implements IDisposable
+
+@inject IJSRuntime Js
+
+
 
 @* A component that shows text entries in a console-like view environment. *@
 @* Text lines are delivered either by setting the 'Items' property to an IEnumerable<string> or IEnumerable<ConsoleLine> *@
 @* The 'Items' property supports collections that implement INotifyCollectionChanged. *@
-@* TODO: Currently, to be thread-sfe, this component uses a lock to keep the internal collection undisturbed, while rendering *@
+@* TODO: Currently, to be thread-safe, this component uses a lock to keep the internal collection undisturbed, while rendering *@
 @* TODO: This currently costs a little performance and much memory because we effectively have two copies of the delivered information (both in 'Items' and '_internalCollection')*@
 
-<div class="log-container @Class">
+<div @ref="_logContainer" class="log-container @Class">
 
     @lock (_internalCollectionLock)
     {
@@ -26,9 +31,24 @@
     }
 </div>
 
+
+<script>
+
+    window.blazorExtensions = window.blazorExtensions || {};
+
+    window.blazorExtensions.console = {
+
+    scrollToBottom: (element) => {
+    if (element) {
+    element.scrollTop = element.scrollHeight;
+    }
+    }
+    }
+</script>
+
+
+
 @code {
-
-
 
     [Parameter(CaptureUnmatchedValues = true)]
     public IDictionary<string, object>? AdditionalAttributes { get; set; }
@@ -55,10 +75,17 @@
     private object? _items;
 
 
+    [Parameter]
+    public bool Autoscroll { get; set; } = false;
+
+    private ElementReference _logContainer;
+
 
     private IList<ConsoleLine> _internalCollection;
 
     private readonly object _internalCollectionLock = new();
+
+
 
     /// <summary>
     ///
@@ -76,6 +103,22 @@
     /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
+
+    }
+
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="firstRender"></param>
+    /// <returns></returns>
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (Autoscroll)
+        {
+            await Js.InvokeVoidAsync("blazorExtensions.console.scrollToBottom", _logContainer);
+        }
 
     }
 

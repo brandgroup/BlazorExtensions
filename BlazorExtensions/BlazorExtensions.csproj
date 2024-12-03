@@ -4,9 +4,9 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Version>1.6.1</Version>
-    <AssemblyVersion>1.6.1</AssemblyVersion>
-    <FileVersion>1.6.1</FileVersion>
+    <Version>1.6.2</Version>
+    <AssemblyVersion>1.6.2</AssemblyVersion>
+    <FileVersion>1.6.2</FileVersion>
     <AssemblyName>Brandgroup.BlazorExtensions</AssemblyName>
     <RootNamespace>Brandgroup.BlazorExtensions</RootNamespace>
     <Company>brandgroup</Company>

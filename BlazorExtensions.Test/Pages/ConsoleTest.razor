@@ -9,12 +9,14 @@
 <PageTitle>Console</PageTitle>
 
 <div class="container-fluid subpage subpage-padded">
-    <Console Class="h-100 overflow-y-scroll" Items="@_items">
+    <Console Autoscroll="true" Class="h-100 overflow-y-scroll" Items="@_items">
 
     </Console>
 
     <button class="btn btn-primary" type="button" @onclick="OnLineAddClick">Add row</button>
 </div>
+
+
 
 
 
@@ -24,6 +26,11 @@
     private readonly ObservableCollection<ConsoleLine> _items = [];
 
 
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
         _items.Add(new ConsoleLine("Jo, Test", "green"));
@@ -40,6 +47,11 @@
         t.Start();
     }
 
+
+
+    /// <summary>
+    /// 
+    /// </summary>
     private void OnLineAddClick()
     {
         // Create a new ConsoleLine with multiple text parts, one green and one blue
