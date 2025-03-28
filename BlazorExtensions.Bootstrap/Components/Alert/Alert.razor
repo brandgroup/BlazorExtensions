@@ -8,7 +8,8 @@
 
 
 @{
-    var bgColor = Type switch {
+    var bgColor = Type switch
+    {
         BackgroundColor.Primary => "alert-primary",
         BackgroundColor.Secondary => "alert-secondary",
         BackgroundColor.Success => "alert-success",
@@ -22,9 +23,9 @@
 }
 
 
-
-<div @ref="_alertElement" class="alert @bgColor" role="alert">
-    @if (HasHeader) {
+<div @ref="_alertElement" class="alert @bgColor @_additionalClass" role="alert">
+    @if (HasHeader)
+    {
         <div class="alert-heading">
             @Header
         </div>
@@ -33,15 +34,14 @@
 </div>
 
 
-
 <script>
     ﻿window.blazorExtensions = window.blazorExtensions || {};
 
     window.blazorExtensions.alert = {
-            close: (el) => {
-                    const alert = bootstrap.Alert.getOrCreateInstance(el)
-                    alert.close();
-                }
+    close: (el) => {
+    const alert = bootstrap.Alert.getOrCreateInstance(el)
+    alert.close();
+    }
     }
 </script>
 
@@ -49,13 +49,11 @@
 
 @code {
 
-    private ElementReference _alertElement;
+    [Parameter]
+    public RenderFragment? Header { get; set; }
 
     [Parameter]
     public bool HasHeader { get; set; } = true;
-
-    [Parameter]
-    public RenderFragment? Header { get; set; }
 
     [Parameter]
     public BackgroundColor Type { get; set; } = BackgroundColor.Default;
@@ -63,13 +61,36 @@
     [Parameter]
     public RenderFragment? Body { get; set; }
 
+    private ElementReference _alertElement;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private string _additionalClass = "";
+
 
 
     /// <summary>
     /// 
     /// </summary>
+    protected override void OnParametersSet() {
+
+        // Get the "class" attribute, if given
+        if (AdditionalAttributes != null && AdditionalAttributes.TryGetValue("class", out var attribute)) {
+            _additionalClass = attribute.ToString() ?? string.Empty;
+        }
+
+        base.OnParametersSet();
+    }
+
+
+
+    /// <summary>
+    ///
+    /// </summary>
     /// <returns></returns>
-    public async Task CloseAsync() {
+    public async Task CloseAsync()
+    {
         await Js.InvokeVoidAsync("blazorExtensions.alert.close", _alertElement);
     }
 

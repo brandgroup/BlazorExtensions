@@ -49,15 +49,19 @@
         </Body>
     </Toast>
 
-    <AlertToast @ref="_alertToast" BackgroundColor="BackgroundColor.Success" Message="Test" />
+    <AlertToast @ref="_alertToast" BackgroundColor="BackgroundColor.Success" Message="AlertTest" />
 </ToastContainer>
 
-<Alert @ref="_alert" Type="BackgroundColor.Danger">
+<Alert class="m-3" @ref="_alert" Type="BackgroundColor.Danger">
     <Header>
-        <h4>Test</h4>
+        <h4>Alert Header</h4>
     </Header>
     <Body>
-        Moin
+        This is the body of the Alert.
+        <br />
+       
+        For example the reason why this alert is visible, what happens now and what to do. Maybe the Alert is just info and this info is given here.<br/>
+        This body doesn't need to be just text. It can be everything you want it to be. Just put it here.
     </Body>
 </Alert>
 
