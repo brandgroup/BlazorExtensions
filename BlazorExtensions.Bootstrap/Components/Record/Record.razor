@@ -36,9 +36,11 @@
     </div>
 
     <!-- Card Body-->
-    <div class="card-body pe-2">
+    <div class="card-body pe-2 d-flex">
+
         @ChildContent
-        <div class="d-flex flex-row-reverse gap-2">
+
+        <div class="d-flex mt-auto flex-row-reverse gap-2 w-100">
 
             @* Remove Record button *@
             <button class="btn @btnDeleteColor p-1" style="z-index: 2;" @onclick:stopPropagation="true" @onclick="OnDeleteBtnClick">
