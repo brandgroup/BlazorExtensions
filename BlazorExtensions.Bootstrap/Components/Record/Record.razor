@@ -34,7 +34,7 @@
             <div class="text-seconardy m-0" style="font-size: 0.75rem;">@MiniTitle</div>
             <h5 class="m-0 text-truncate">@Title</h5>
 
-            @if (string.IsNullOrEmpty(Icon) && !string.IsNullOrEmpty(IconImg))
+            @if (!string.IsNullOrEmpty(IconImg))
             {
                 <img class="ms-auto m-0 p-0" style="height: 1.9rem; width: auto;" src="@IconImg" alt="" />
             }
