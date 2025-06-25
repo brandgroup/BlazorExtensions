@@ -115,6 +115,7 @@
     [Parameter]
     public bool Selected { get; set; } = false;
 
+    // We use CssClass instead of AdditionalAttributes because we want to add and not replace css classes!
     [Parameter]
     public string CssClass { get; set; } = string.Empty;
 

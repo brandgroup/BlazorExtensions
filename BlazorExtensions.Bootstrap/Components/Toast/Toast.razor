@@ -24,11 +24,11 @@
 <div @ref="_toastElement" id="@Id" class="toast @bgColor" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="@Delay" data-bs-animation="@(Animation ? "true" : "false")" data-bs-autohide="@(Autohide ? "true" : "false")">
     @if (HasHeader) {
         <div class="toast-header">
-            @Header
+            @ToastHeader
         </div>
     }
     <div class="toast-body">
-        @Body
+        @ToastBody
     </div>
 </div>
 
@@ -46,6 +46,8 @@
                 }
     }
 </script>
+
+
 
 @code {
 
@@ -68,12 +70,13 @@
     public bool HasHeader { get; set; } = true;
 
     [Parameter]
-    public RenderFragment? Header { get; set; }
+    public RenderFragment? ToastHeader { get; set; }
 
     [Parameter]
-    public RenderFragment? Body { get; set; }
+    public RenderFragment? ToastBody { get; set; }
 
     private ElementReference _toastElement;
+
 
 
     /// <summary>
