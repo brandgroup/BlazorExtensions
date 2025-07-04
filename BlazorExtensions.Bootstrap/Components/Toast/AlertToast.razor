@@ -1,11 +1,7 @@
-﻿@using Microsoft.JSInterop
-
-@inject IJSRuntime Js
-
-@* An AlertToast is a simplified version of a Toast that only displays a message to the user. *@
+﻿@* An AlertToast is a simplified version of a Toast that only displays a message to the user. *@
 @* It contains a close button that can be used to dismiss the toast. *@
 
-
+@using Microsoft.AspNetCore.Components.Web
 
 @{
     var closeColor = BackgroundColor switch {
@@ -18,14 +14,14 @@
 
 
 <Toast Id="@Id" @ref="_toast" Autohide="@Autohide" Delay="@Delay" Animation="@Animation" BackgroundColor="@BackgroundColor" HasHeader="false">
-    <Body>
+    <ToastBody>
         <div class="d-flex">
             <div class="flex-fill">
                 @Message
             </div>
-            <button type="button" class="btn-close @closeColor" data-bs-dismiss="toast" @onclick="@OnCloseClickCore"></button>
+            <button type="button" class="btn-close @closeColor" data-bs-dismiss="toast" @onclick="OnCloseClickCore"></button>
         </div>
-    </Body>
+    </ToastBody>
 </Toast>
 
 
