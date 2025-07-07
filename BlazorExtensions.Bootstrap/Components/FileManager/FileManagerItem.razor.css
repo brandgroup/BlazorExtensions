@@ -1,0 +1,13 @@
+﻿.file-manager-item {
+    cursor: pointer;
+}
+
+.file-manager-item-selected {
+    background-color: rgba(var(--bs-primary-rgb), 1) !important;
+    color: white;
+}
+
+    .file-manager-item:hover {
+        background-color: rgba(var(--bs-primary-rgb), 0.8);
+        color: white;
+    }

@@ -1,28 +1,45 @@
-﻿
-<div class="vstack align-items-center">
-    <i class="bi bi-folder" style="font-size:3.5rem;"></i>
-    <span>@Name</span>
+﻿@using Microsoft.AspNetCore.Components.Web
+
+@{
+    var icon = Item.Type switch {
+        FileManagerItemType.Pdf => "bi-file-earmark-pdf",
+        FileManagerItemType.Excel => "bi-file-earmark-excel",
+            FileManagerItemType.Folder => "bi-folder",
+        FileManagerItemType.Unspecified => "bi-file-earmark",
+        _ => "bi-question-circle"
+    };
+
+    var selectedClass = Selected ? "file-manager-item-selected" : "";
+}
+
+<div class="vstack align-items-center file-manager-item @selectedClass" style="min-width:7.25rem;" @onclick="OnClickCore">
+    <i class="bi @icon hover-text" style="font-size:3.5rem;"></i>
+    <span class="d-inline-block text-truncate" style="font-size: 0.75rem; max-width:6.75rem;">@Item.Name</span>
 </div>
 
 @code {
 
     [Parameter]
-    public string Name { get; set; }
+    public FileManagerFile? Item { get; set; }
+
     [Parameter]
-    public string Size { get; set; }
+    public bool Selected { get; set; } = false;
+
     [Parameter]
-    public string DateModified { get; set; }
-    [Parameter]
-    public FileManagerItemType Type { get; set; }
-    [Parameter]
-    public EventCallback OnClick { get; set; }
+    public EventCallback<FileManagerItemClickEventArgs> OnClick { get; set; }
 
 
-    private async Task OnClickCore()
-    {
-        if (OnClick.HasDelegate)
-        {
-            await OnClick.InvokeAsync();
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
+    private async Task OnClickCore() {
+
+        if (OnClick.HasDelegate) {
+            await OnClick.InvokeAsync(new FileManagerItemClickEventArgs(this));
         }
+
+        Selected = !Selected;
     }
 }

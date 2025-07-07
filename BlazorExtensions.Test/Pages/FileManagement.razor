@@ -7,7 +7,7 @@
 
 
 <div class="subpage subpage-padded">
-    <FileManager />
+    <FileManager FileSystemProvider="_fsProvider" />
 </div>
 
 
@@ -15,6 +15,19 @@
 
 
 
-@code
-{
+@code {
+
+
+    private IFileSystemProvider _fsProvider;
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    protected override async Task OnInitializedAsync()
+    {
+        _fsProvider = new DiskFileSystemProvider(@"C:\Users\roslan\Documents\Git\BlazorExtensions");
+    }
+
 }

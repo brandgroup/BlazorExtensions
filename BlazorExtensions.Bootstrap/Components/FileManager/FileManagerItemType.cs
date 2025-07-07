@@ -4,5 +4,6 @@ public enum FileManagerItemType {
     Excel,
     Word,
     Pdf,
-    Folder
+    Folder,
+    Unspecified // A file type that we have no dedicated type for
 }
