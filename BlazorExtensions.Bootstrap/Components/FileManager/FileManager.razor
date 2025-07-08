@@ -7,13 +7,20 @@
 @inject IJSRuntime JS
 
 @{
+    var deleteDisabledClass = _selectedItem == null ? "disabled" : "";
     var downloadDisabledClass = (_selectedItem == null || _selectedItem.File!.Type == FileManagerItemType.Folder) ? "disabled" : "";
 }
 
 <div class="card">
-    <div class="card-header">
+    <div class="card-header card-header-clean">
 
         <div class="btn-group" role="group">
+            <button class="btn btn-secondary" type="button">
+                <i class="bi bi-folder-plus"></i>
+            </button>
+            <button class="btn btn-secondary @deleteDisabledClass" type="button">
+                <i class="bi bi-trash"></i>
+            </button>
         </div>
 
         <div class="btn-group" role="group">
@@ -35,22 +42,24 @@
             <div class="col col-auto">
             </div>
 
-            <div class="col card p-0">
+            <div class="col card p-0 card-clean">
 
-                <div class="card-header">
+                <div class="card-header card-header-clean">
                     <div class="hstack gap-2 align-items-center">
-
+                        <div class="cursor-pointer" @onclick="OnDirectoryUpClick">
+                            <i class="bi bi-arrow-90deg-up"></i>
+                        </div>
                         <div class="vr"></div>
-                        <span class="text-secondary">@GetBeautifulPath()</span>
+                        <span class="text-secondary">@GetBreadcrumbPath()</span>
                     </div>
-                    
+
                 </div>
 
                 <div class="card-body row row-cols-auto">
 
                     @foreach (var file in _files) {
                         <div class="col">
-                            <FileManagerItem OnClick="OnItemClicked" File="file"></FileManagerItem>
+                            <FileManagerItem @key="file.Name" OnClick="OnItemClicked" File="file"></FileManagerItem>
                         </div>
                     }
                 </div>
@@ -76,7 +85,7 @@
 
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <returns></returns>
     protected override async Task OnInitializedAsync() {
@@ -90,7 +99,7 @@
 
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="firstRender"></param>
     /// <returns></returns>
@@ -102,7 +111,7 @@
 
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <returns></returns>
     async ValueTask IAsyncDisposable.DisposeAsync() {
@@ -135,6 +144,13 @@
         // If that item is already selected, do action
 
         if (item.File!.Type == FileManagerItemType.Folder) {
+
+            // Cancel the selection of the current item
+            if (_selectedItem != null) {
+                _selectedItem.Selected = false;
+                _selectedItem = null;
+            }
+
             // Navigate to folder
             _path = Path.Combine(_path, item.File.Name);
             _files = await FileSystemProvider.ListDirectoryAsync(_path);
@@ -179,8 +195,29 @@
 
     }
 
-    private string GetBeautifulPath() {
-        return _path.Replace(@"\", "  /  ");
+
+    /// <summary>
+    ///
+    /// </summary>
+    private async Task OnDirectoryUpClick() {
+
+        // Cancel the selection of the current item
+        if (_selectedItem != null) {
+            _selectedItem.Selected = false;
+            _selectedItem = null;
+        }
+
+        _path = (!string.IsNullOrEmpty(Path.GetDirectoryName(_path)) ? Path.GetDirectoryName(_path) : ".")!;
+        _files = await FileSystemProvider.ListDirectoryAsync(_path);
     }
 
+
+    private async Task NavigateDirectory(string path)
+    {
+
+    }
+
+    private string GetBreadcrumbPath() {
+        return _path.Replace(@"\", "  /  ");
+    }
 }

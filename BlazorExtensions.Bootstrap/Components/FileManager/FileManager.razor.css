@@ -1,0 +1,16 @@
+﻿.cursor-pointer {
+    cursor: pointer;
+}
+
+.card-clean {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-bottom-width: 0px;
+}
+
+.card-header-clean {
+    background-color: white;
+}
