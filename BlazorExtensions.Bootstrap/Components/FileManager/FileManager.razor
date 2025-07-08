@@ -1,8 +1,14 @@
-﻿@using Microsoft.JSInterop
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
 
 @implements IAsyncDisposable
 
 @inject IJSRuntime JS
+
+@{
+    var downloadDisabledClass = (_selectedItem == null || _selectedItem.File!.Type == FileManagerItemType.Folder) ? "disabled" : "";
+}
 
 <div class="card">
     <div class="card-header">
@@ -14,13 +20,14 @@
             <button class="btn btn-secondary" type="button">
                 <i class="bi bi-arrow-clockwise"></i>
             </button>
-            <button class="btn btn-secondary" type="button">
+            <button class="btn btn-secondary @downloadDisabledClass" type="button">
                 <i class="bi bi-download"></i>
             </button>
-            <button class="btn btn-secondary" type="button">
+            <button class="btn btn-secondary" type="button" @onclick="OnUploadClick">
                 <i class="bi bi-upload"></i>
             </button>
         </div>
+        <InputFile id="hiddenFileInput" OnChange="OnFileInput" style="display: none;"></InputFile>
     </div>
     <div class="card-body p-0">
         <div class="row m-0">
@@ -31,20 +38,25 @@
             <div class="col card p-0">
 
                 <div class="card-header">
+                    <div class="hstack gap-2 align-items-center">
+
+                        <div class="vr"></div>
+                        <span class="text-secondary">@GetBeautifulPath()</span>
+                    </div>
+                    
                 </div>
 
                 <div class="card-body row row-cols-auto">
 
-                    @foreach (var item in _items) {
+                    @foreach (var file in _files) {
                         <div class="col">
-                            <FileManagerItem OnClick="OnItemClicked" Item="item"></FileManagerItem>
+                            <FileManagerItem OnClick="OnItemClicked" File="file"></FileManagerItem>
                         </div>
                     }
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 
 @code {
@@ -55,21 +67,44 @@
     [Parameter]
     public EventCallback<FileManagerDownloadRequestEventArgs> OnDownloadRequest { get; set; }
 
-    private IEnumerable<FileManagerFile> _items = [];
+    private string _path = ".";
+    private IEnumerable<FileManagerFile> _files = [];
+    private FileManagerItem? _selectedItem;
 
     private IJSObjectReference? _module;
 
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync() {
-        _items = await FileSystemProvider.ListDirectoryAsync("");
+
+        if (FileSystemProvider != null)
+            // Show files of the root path
+            _files = await FileSystemProvider.ListDirectoryAsync(_path);
+
     }
 
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="firstRender"></param>
+    /// <returns></returns>
     protected override async Task OnAfterRenderAsync(bool firstRender) {
-        if (firstRender) {
-            //_module = await JS.InvokeAsync<IJSObjectReference>("import", "/content/Brandgroup.BlazorExtensions.Bootstrap/Components/FileManager/FileManager.razor.js");
-        }
+        if (firstRender) _module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/Brandgroup.BlazorExtensions.Bootstrap/Components/FileManager/FileManager.razor.js");
+
     }
 
 
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     async ValueTask IAsyncDisposable.DisposeAsync() {
         if (_module is not null) {
             try {
@@ -80,18 +115,37 @@
     }
 
 
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="args"></param>
+    /// <returns></returns>
     private async Task OnItemClicked(FileManagerItemClickEventArgs args) {
-        var obj = args.Object;
+        var item = args.Item;
 
-        if (!obj.Selected) return;
+        // If another item is already selected, unselect that
+        if (_selectedItem != null && _selectedItem != item) {
+            _selectedItem.Selected = false;
+        }
 
-        // Download item
-        var stream = FileSystemProvider.GetFileStream(obj.Item);
-        await DownloadFileFromStreamAsync(obj.Item.Name, stream);
+        _selectedItem = item;
 
+        if (!item.Selected || FileSystemProvider == null) return;
+        // If that item is already selected, do action
 
+        if (item.File!.Type == FileManagerItemType.Folder) {
+            // Navigate to folder
+            _path = Path.Combine(_path, item.File.Name);
+            _files = await FileSystemProvider.ListDirectoryAsync(_path);
 
+        } else {
+            // Download item
+            var stream = FileSystemProvider.GetFileStream(item.File);
+            await DownloadFileFromStreamAsync(item.File.Name, stream);
+        }
     }
+
 
 
     /// <summary>
@@ -101,10 +155,32 @@
     /// <param name="stream"></param>
     /// <returns></returns>
     private async Task DownloadFileFromStreamAsync(string fileName, Stream stream) {
-        using var streamRef = new DotNetStreamReference(stream: stream);
-        //await _module.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef); // This calls follows Microsoft's Blazor example for downloading files: https://learn.microsoft.com/en-us/aspnet/core/blazor/file-downloads?view=aspnetcore-9.0#download-from-a-stream
-        await JS.InvokeVoidAsync("window.downloadHelper.downloadFileFromStream", fileName, streamRef); // This calls follows Microsoft's Blazor example for downloading files: https://learn.microsoft.com/en-us/aspnet/core/blazor/file-downloads?view=aspnetcore-9.0#download-from-a-stream
+        using var streamRef = new DotNetStreamReference(stream);
+        await _module!.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef); // This calls follows Microsoft's Blazor example for downloading files: https://learn.microsoft.com/en-us/aspnet/core/blazor/file-downloads?view=aspnetcore-9.0#download-from-a-stream
 
+    }
+
+
+
+    /// <summary>
+    ///
+    /// </summary>
+    private async Task OnUploadClick() {
+        await _module!.InvokeVoidAsync("clickElement", "hiddenFileInput");
+    }
+
+
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="obj"></param>
+    private void OnFileInput(InputFileChangeEventArgs obj) {
+
+    }
+
+    private string GetBeautifulPath() {
+        return _path.Replace(@"\", "  /  ");
     }
 
 }

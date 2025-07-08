@@ -9,4 +9,6 @@ public interface IFileSystemProvider {
     public Task DeleteDirectory(string path);
 
     public Stream GetFileStream(FileManagerFile file);
+
+    public void UploadFile(string filePath, Stream fileStream);
 }

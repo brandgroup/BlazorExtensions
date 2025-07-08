@@ -5,11 +5,18 @@ public class DiskFileSystemProvider(string rootPath) : IFileSystemProvider {
     private string _rootPath = rootPath;
 
 
-    public async Task<IEnumerable<FileManagerFile>> ListDirectoryAsync(string path)
-    {
 
-        var files = Directory.EnumerateFiles(Path.Combine(_rootPath));
-        var directories = Directory.EnumerateDirectories(Path.Combine(_rootPath));
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="relativePath"></param>
+    /// <returns></returns>
+    public async Task<IEnumerable<FileManagerFile>> ListDirectoryAsync(string relativePath)
+    {
+        var absolutePath = Path.GetFullPath(Path.Combine(_rootPath, relativePath));
+
+        var files = Directory.EnumerateFiles(absolutePath);
+        var directories = Directory.EnumerateDirectories(absolutePath);
 
         var fmFiles = files.Select(x => new DiskFileManagerFile(Path.GetFileName(x)) {FullPath = x});
         var fmDirectories = directories.Select(x => new DiskFileManagerFile(Path.GetFileName(x), FileManagerItemType.Folder) {FullPath = x});
@@ -21,10 +28,26 @@ public class DiskFileSystemProvider(string rootPath) : IFileSystemProvider {
 
     }
 
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
     public Task CreateDirectory(string path) {
         throw new NotImplementedException();
     }
 
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
     public Task DeleteDirectory(string path) {
         throw new NotImplementedException();
     }
@@ -44,5 +67,18 @@ public class DiskFileSystemProvider(string rootPath) : IFileSystemProvider {
         }
 
         return File.OpenRead(diskFile.FullPath);
+    }
+
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <param name="fileStream"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public void UploadFile(string filePath, Stream fileStream)
+    {
+        throw new NotImplementedException();
     }
 }

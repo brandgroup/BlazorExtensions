@@ -6,13 +6,13 @@ namespace Brandgroup.BlazorExtensions.Bootstrap.Components;
 public class FileManagerItemClickEventArgs : EventArgs {
 
 
-    public required FileManagerItem Object { get; set; }
+    public required FileManagerItem Item { get; set; }
 
 
 
 
     [SetsRequiredMembers]
     public FileManagerItemClickEventArgs(FileManagerItem item) {
-        Object = item;
+        Item = item;
     }
 }
