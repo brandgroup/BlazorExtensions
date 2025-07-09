@@ -33,11 +33,16 @@ public abstract class FileManagerFile {
     private static FileManagerItemType GetItemTypeFromFileName(string fileName) {
         var extension = Path.GetExtension(fileName).ToLowerInvariant();
 
-        return fileName switch {
-            "pdf" => FileManagerItemType.Pdf,
-            "xlsx" => FileManagerItemType.Excel,
+        var result = extension switch {
+            ".pdf" => FileManagerItemType.Pdf,
+            ".xlsx" => FileManagerItemType.Excel,
+            ".txt" => FileManagerItemType.Text,
+            ".md" => FileManagerItemType.Richtext,
+            ".html" => FileManagerItemType.Richtext,
             _ => FileManagerItemType.Unspecified
         };
+
+        return result;
     }
 
 }

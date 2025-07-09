@@ -3,8 +3,11 @@
 @{
     var icon = File.Type switch {
         FileManagerItemType.Pdf => "bi-file-earmark-pdf",
-        FileManagerItemType.Excel => "bi-file-earmark-excel",
-            FileManagerItemType.Folder => "bi-folder",
+        FileManagerItemType.Excel => "bi-file-earmark-spreadsheet",
+        FileManagerItemType.Text => "bi-file-earmark-text",
+        FileManagerItemType.Richtext => "bi-file-earmark-richtext",
+        FileManagerItemType.Image => "bi-file-earmark",
+        FileManagerItemType.Folder => "bi-folder",
         FileManagerItemType.Unspecified => "bi-file-earmark",
         _ => "bi-question-circle"
     };
