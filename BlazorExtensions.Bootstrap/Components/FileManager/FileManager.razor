@@ -262,7 +262,15 @@
     ///
     /// </summary>
     private async Task DeleteSelectedItemAsync() {
+
+        if (_selectedItem?.File == null) return;
+
+        var confirmed = await JS.InvokeAsync<bool>("confirm", $"Are you sure that you want to delete {_selectedItem.File.Name}?");
+        if (!confirmed) return;
+
         await FileSystemProvider?.DeleteItemAsync(_selectedItem.File);
+        _selectedItem = null;
+
     }
 
 }
