@@ -4,15 +4,15 @@ namespace Brandgroup.BlazorExtensions.Bootstrap.Components;
 
 public class DiskFileManagerFile : FileManagerFile {
 
-    public string? FullPath { get; set; }
+    public required string FullPath { get; init; }
 
     [SetsRequiredMembers]
-    public DiskFileManagerFile(string name) : base(name)
-    {
+    public DiskFileManagerFile(string fullPath) : base(Path.GetFileName(fullPath)) {
+        FullPath = fullPath;
     }
 
     [SetsRequiredMembers]
-    public DiskFileManagerFile(string name, FileManagerItemType type) : base(name, type)
-    {
+    public DiskFileManagerFile(string fullPath, FileManagerItemType type) : base(Path.GetFileName(fullPath), type) {
+        FullPath = fullPath;
     }
 }

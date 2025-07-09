@@ -18,20 +18,24 @@ public abstract class FileManagerFile {
 
 
     [SetsRequiredMembers]
-    public FileManagerFile(string name, FileManagerItemType type)
-    {
+    public FileManagerFile(string name, FileManagerItemType type) {
         Name = name;
         Type = type;
     }
 
 
-    public static FileManagerItemType GetItemTypeFromFileName(string fileName)
-    {
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fileName"></param>
+    /// <returns></returns>
+    private static FileManagerItemType GetItemTypeFromFileName(string fileName) {
         var extension = Path.GetExtension(fileName).ToLowerInvariant();
 
-        return fileName switch
-        {
+        return fileName switch {
             "pdf" => FileManagerItemType.Pdf,
+            "xlsx" => FileManagerItemType.Excel,
             _ => FileManagerItemType.Unspecified
         };
     }
