@@ -5,9 +5,7 @@
 
 
 
-<InputFile @ref="_inputFileRef" @attributes="@CapturedAttributes" OnChange="@HandleFileSelection" multiple webkitdirectory />
-
-
+<InputFile @ref="_inputFileRef" @attributes="@AdditionalAttributes" OnChange="@HandleFileSelection" multiple webkitdirectory />
 
 <script>
     window.getFileList = (inputFile) => {
@@ -23,19 +21,18 @@
 
 
 
-
 @code {
-
-    private InputFile? _inputFileRef;
-
-    [Parameter(CaptureUnmatchedValues = true)]
-    public Dictionary<string,object>? CapturedAttributes { get; set; }
 
     [Parameter]
     public int MaximumFileCount { get; set; } = 10;
 
     [Parameter]
     public EventCallback<FilePickerSelectedEventArgs> OnFilesSelected { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private InputFile? _inputFileRef;
 
 
 
@@ -58,6 +55,4 @@
 
         await OnFilesSelected.InvokeAsync(new FilePickerSelectedEventArgs(browserFilesWithPaths));
     }
-
-    
 }

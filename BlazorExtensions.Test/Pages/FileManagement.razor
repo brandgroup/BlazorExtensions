@@ -6,8 +6,12 @@
 <PageTitle>FileManager</PageTitle>
 
 
-<div class="subpage subpage-padded">
-    <FileManager FileSystemProvider="_fsProvider" />
+<div class="container-fluid subpage subpage-padded">
+    
+    <div class="h-100 mb-3">
+        <FileManager class="h-100" FileSystemProvider="_fsProvider" />
+    </div>
+    
 </div>
 
 
@@ -27,7 +31,7 @@
     /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
-        _fsProvider = new DiskFileSystemProvider(@"C:\Users\roslan\Documents\Git\BlazorExtensions");
+        _fsProvider = new DiskFileSystemProvider(@"\\srvfbapp\brand_tools$");
     }
 
 }

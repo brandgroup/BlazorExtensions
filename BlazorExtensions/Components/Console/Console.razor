@@ -13,15 +13,12 @@
 @* TODO: Currently, to be thread-safe, this component uses a lock to keep the internal collection undisturbed, while rendering *@
 @* TODO: This currently costs a little performance and much memory because we effectively have two copies of the delivered information (both in 'Items' and '_internalCollection')*@
 
-<div @ref="_logContainer" class="log-container @Class">
+<div @ref="_logContainer" class="log-container @_additionalClass">
 
-    @lock (_internalCollectionLock)
-    {
-        @foreach (var logMessage in _internalCollection)
-        {
+    @lock (_internalCollectionLock) {
+        @foreach (var logMessage in _internalCollection) {
             <div class="log-line">
-                @foreach (var textPart in logMessage.Parts)
-                {
+                @foreach (var textPart in logMessage.Parts) {
                     <span class="log-text-part" style="color: @(textPart.Color ?? "rgb(204, 204, 204)")">
                         @textPart.Text
                     </span>
@@ -38,11 +35,11 @@
 
     window.blazorExtensions.console = {
 
-    scrollToBottom: (element) => {
-    if (element) {
-    element.scrollTop = element.scrollHeight;
-    }
-    }
+        scrollToBottom: (element) => {
+            if (element) {
+                element.scrollTop = element.scrollHeight;
+            }
+        }
     }
 </script>
 
@@ -50,23 +47,10 @@
 
 @code {
 
-    [Parameter(CaptureUnmatchedValues = true)]
-    public IDictionary<string, object>? AdditionalAttributes { get; set; }
-
-
     [Parameter]
-    public string Class { get; set; }
-
-
-    [Parameter]
-    public object? Items
-    {
-        get
-        {
-            return _items;
-        }
-        set
-        {
+    public object? Items {
+        get => _items;
+        set {
             OnItemsChanging();
             _items = value;
             OnItemsChanged();
@@ -74,49 +58,40 @@
     }
     private object? _items;
 
-
     [Parameter]
     public bool Autoscroll { get; set; } = false;
 
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object>? AdditionalAttributes { get; set; }
+
     private ElementReference _logContainer;
-
-
-    private IList<ConsoleLine> _internalCollection;
-
+    private IList<ConsoleLine> _internalCollection = [];
     private readonly object _internalCollectionLock = new();
+    private string _additionalClass = "";
 
 
 
     /// <summary>
     ///
     /// </summary>
-    public Console()
-    {
-        _internalCollection = [];
+    protected override void OnParametersSet() {
+        // Get the "class" attribute, if given
+        if (AdditionalAttributes != null && AdditionalAttributes.TryGetValue("class", out var attribute)) {
+            _additionalClass = attribute.ToString() ?? string.Empty;
+        }
+
+        base.OnParametersSet();
     }
 
 
 
     /// <summary>
     ///
-    /// </summary>
-    /// <returns></returns>
-    protected override async Task OnInitializedAsync()
-    {
-
-    }
-
-
-
-    /// <summary>
-    /// 
     /// </summary>
     /// <param name="firstRender"></param>
     /// <returns></returns>
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (Autoscroll)
-        {
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (Autoscroll) {
             await Js.InvokeVoidAsync("blazorExtensions.console.scrollToBottom", _logContainer);
         }
 
@@ -127,12 +102,10 @@
     /// <summary>
     ///
     /// </summary>
-    private void OnItemsChanging()
-    {
+    private void OnItemsChanging() {
         // The Items property is changing
         // We need to unsubscribe from the old collection to avoid memory leaks
-        if (_items is INotifyCollectionChanged coll)
-        {
+        if (_items is INotifyCollectionChanged coll) {
             coll.CollectionChanged -= OnItemCollectionChanged;
         }
 
@@ -144,14 +117,11 @@
     /// <summary>
     ///
     /// </summary>
-    private void OnItemsChanged()
-    {
+    private void OnItemsChanged() {
         // The Items property has changed
-        switch (Items)
-        {
+        switch (Items) {
             // First, we check if the new Items property is an IEnumerable<string> that we can use to render the log messages
-            case IEnumerable<string> coll:
-                {
+            case IEnumerable<string> coll: {
                     var consoleLines = ConvertStringsToConsoleLines(coll);
                     _internalCollection = consoleLines.ToList();
                     break;
@@ -163,8 +133,7 @@
 
 
         // If the new Items property is also an INotifyCollectionChanged, we subscribe to the CollectionChanged event
-        if (_items is INotifyCollectionChanged notifyCollection)
-        {
+        if (_items is INotifyCollectionChanged notifyCollection) {
             notifyCollection.CollectionChanged += OnItemCollectionChanged;
         }
     }
@@ -176,8 +145,7 @@
     /// </summary>
     /// <param name="collection"></param>
     /// <returns></returns>
-    private IEnumerable<ConsoleLine> ConvertStringsToConsoleLines(IEnumerable<string> collection)
-    {
+    private IEnumerable<ConsoleLine> ConvertStringsToConsoleLines(IEnumerable<string> collection) {
         return collection.Select(x => new ConsoleLine(x));
     }
 
@@ -188,19 +156,13 @@
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="evtArgs"></param>
-    private void OnItemCollectionChanged(object? sender, NotifyCollectionChangedEventArgs evtArgs)
-    {
-        switch (evtArgs.Action)
-        {
+    private void OnItemCollectionChanged(object? sender, NotifyCollectionChangedEventArgs evtArgs) {
+        switch (evtArgs.Action) {
             // Check if new items have been added, if yes, add them to the internal collection
-            case NotifyCollectionChangedAction.Add:
-                {
-                    lock (_internalCollectionLock)
-                    {
-                        foreach (var item in evtArgs.NewItems!)
-                        {
-                            switch (item)
-                            {
+            case NotifyCollectionChangedAction.Add: {
+                    lock (_internalCollectionLock) {
+                        foreach (var item in evtArgs.NewItems!) {
+                            switch (item) {
                                 case string str:
                                     _internalCollection.Add(new ConsoleLine(str));
                                     break;
@@ -221,10 +183,8 @@
     }
 
 
-    void IDisposable.Dispose()
-    {
-        if (_items is INotifyCollectionChanged coll)
-        {
+    void IDisposable.Dispose() {
+        if (_items is INotifyCollectionChanged coll) {
             coll.CollectionChanged -= OnItemCollectionChanged;
         }
     }

@@ -4,8 +4,7 @@
     var styleString = Clickable ? "cursor: pointer;" : "";
     var cardSelectClass = Selected ? "border-dark border-2" : string.Empty;
 
-    var bgColor = Color switch
-    {
+    var bgColor = Color switch {
         BackgroundColor.Primary => "text-bg-primary",
         BackgroundColor.Secondary => "text-bg-secondary",
         BackgroundColor.Success => "text-bg-success",
@@ -17,17 +16,15 @@
         _ => ""
     };
 
-    var btnDeleteColor = Color switch
-    {
+    var btnDeleteColor = Color switch {
         BackgroundColor.Danger => "btn-outline-light",
         _ => "btn-outline-danger"
     };
 }
 
-<div class="card shadow-sm rounded-3 @cardSelectClass @bgColor @CssClass" style="@styleString @Style" @onclick="OnCardClick">
+<div class="card shadow-sm rounded-3 @cardSelectClass @bgColor @_additionalClass" style="@styleString @_additionalStyle" @onclick="OnCardClick">
 
-    @if (!string.IsNullOrEmpty(HeaderText))
-    {
+    @if (!string.IsNullOrEmpty(HeaderText)) {
         <!-- Card Header-->
         <div class="card-header p-1 ps-3 pt-2 pe-2">
             @HeaderText
@@ -42,12 +39,9 @@
             <div class="text-seconardy m-0" style="font-size: 0.75rem;">@MiniTitle</div>
             <h5 class="m-0 text-truncate card-title">@Title</h5>
 
-            @if (!string.IsNullOrEmpty(IconImg))
-            {
+            @if (!string.IsNullOrEmpty(IconImg)) {
                 <img class="ms-auto m-0 p-0" style="height: 1.9rem; width: auto;" src="@IconImg" alt="" />
-            }
-            else
-            {
+            } else {
                 <div class="bi @Icon h3 ms-auto m-0 p-0"></div>
             }
 
@@ -63,8 +57,7 @@
             </button>
 
             @* Edit Record button *@
-            @if (Editable)
-            {
+            @if (Editable) {
                 <button class="btn btn-outline-primary p-1" style="z-index: 2;" @onclick:stopPropagation="true" @onclick="OnEditBtnClick">
                     <div class="bi bi-pencil h5 m-0 p-0"></div>
                 </button>
@@ -73,7 +66,6 @@
 
     </div>
 </div>
-
 
 
 @code {
@@ -92,7 +84,8 @@
     [Parameter]
     public string IconImg { get; set; } = string.Empty;
 
-    [Parameter] public string HeaderText { get; set; } = string.Empty;
+    [Parameter]
+    public string HeaderText { get; set; } = string.Empty;
 
     [Parameter]
     public BackgroundColor Color { get; set; }
@@ -112,10 +105,6 @@
     [Parameter]
     public bool Selected { get; set; } = false;
 
-    // We use CssClass instead of AdditionalAttributes because we want to add and not replace css classes!
-    [Parameter]
-    public string CssClass { get; set; } = string.Empty;
-
     [Parameter]
     public string Style { get; set; } = string.Empty;
 
@@ -134,16 +123,31 @@
     [Parameter]
     public EventCallback<RecordSelectEventArgs> OnSelectChanged { get; set; }
 
+    [Parameter(CaptureUnmatchedValues = true)]
+    public IDictionary<string, object>? AdditionalAttributes { get; set; }
 
+    private string _additionalClass = "";
 
+    private string _additionalStyle = "";
+
+    protected override void OnParametersSet() {
+        // Get the "class" attribute, if given
+        if (AdditionalAttributes != null && AdditionalAttributes.TryGetValue("class", out var attribute)) {
+            _additionalClass = attribute.ToString() ?? string.Empty;
+        }
+
+        // Get the "style" attribute, if given
+        if (AdditionalAttributes != null && AdditionalAttributes.TryGetValue("style", out var styleAttr)) {
+            _additionalClass = styleAttr.ToString() ?? string.Empty;
+        }
+    }
 
 
     /// <summary>
     ///
     /// </summary>
     /// <param name="e"></param>
-    private async Task OnEditBtnClick(MouseEventArgs e)
-    {
+    private async Task OnEditBtnClick(MouseEventArgs e) {
         if (Editable)
             await OnEditClick.InvokeAsync(new RecordEventArgs(this));
     }
@@ -155,8 +159,7 @@
     /// </summary>
     /// <param name="e"></param>
     /// <returns></returns>
-    private async Task OnDeleteBtnClick(MouseEventArgs e)
-    {
+    private async Task OnDeleteBtnClick(MouseEventArgs e) {
         await OnDeleteClick.InvokeAsync(new RecordEventArgs(this));
     }
 
@@ -166,13 +169,10 @@
     ///
     /// </summary>
     /// <returns></returns>
-    private async Task OnCardClick()
-    {
-        if (Clickable)
-        {
+    private async Task OnCardClick() {
+        if (Clickable) {
             await OnClick.InvokeAsync(new RecordEventArgs(this));
-            if (Selectable)
-            {
+            if (Selectable) {
                 Selected = !Selected;
                 await OnSelectChanged.InvokeAsync(new RecordSelectEventArgs(this, Selected));
             }
