@@ -8,7 +8,7 @@
 
 @{
     var deleteDisabledClass = _selectedItem == null ? "disabled" : "";
-    var downloadDisabledClass = (_selectedItem == null || _selectedItem.File!.Type == FileManagerItemType.Folder) ? "disabled" : "";
+    var downloadDisabledClass = _selectedItem == null || _selectedItem.File!.Type == FileManagerItemType.Folder ? "disabled" : "";
 }
 
 <div class="card @_additionalClass" >
@@ -37,12 +37,12 @@
         <InputFile id="hiddenFileInput" OnChange="OnFileInput" style="display: none;"></InputFile>
     </div>
     <div class="card-body p-0 overflow-hidden">
-        <div class="row m-0 overflow-hidden h-100">
+        <div class="row m-0 h-100">
 
             <div class="col col-auto">
             </div>
 
-            <div class="col card p-0 card-clean h-100 overflow-hidden">
+            <div class="col card p-0 card-clean h-100">
 
                 <div class="card-header card-header-clean">
                     <div class="hstack gap-2 align-items-center">
@@ -54,7 +54,7 @@
                     </div>
                 </div>
 
-                <div class="card-body p-0 row row-cols-auto overflow-auto m-0">
+                <div class="card-body row row-cols-auto overflow-auto m-0">
                         @foreach (var file in _files) {
                             <div class="col">
                                 <FileManagerItem @key="file.Name" OnClick="OnItemClicked" File="file"></FileManagerItem>
