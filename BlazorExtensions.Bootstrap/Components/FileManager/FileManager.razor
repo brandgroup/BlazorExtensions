@@ -11,7 +11,7 @@
     var downloadDisabledClass = _selectedItem == null || _selectedItem.File!.Type == FileManagerItemType.Folder ? "disabled" : "";
 }
 
-<div class="card @_additionalClass" >
+<div class="card @_additionalClass" style="@_additionalStyle">
     <div class="card-header card-header-clean">
 
         <div class="btn-group" role="group">
@@ -77,10 +77,12 @@
     [Parameter(CaptureUnmatchedValues = true)]
     public IDictionary<string, object>? AdditionalAttributes { get; set; }
 
-    private string _additionalClass = "";
     private string _path = ".";
     private IEnumerable<FileManagerFile> _files = [];
     private FileManagerItem? _selectedItem;
+
+    private string _additionalClass = "";
+    private string _additionalStyle = "";
     private IJSObjectReference? _module;
 
 
@@ -97,14 +99,24 @@
     }
 
 
+
+    /// <summary>
+    /// 
+    /// </summary>
     protected override void OnParametersSet() {
         // Get the "class" attribute, if given
         if (AdditionalAttributes != null && AdditionalAttributes.TryGetValue("class", out var attribute)) {
             _additionalClass = attribute.ToString() ?? string.Empty;
         }
 
+        // Get the "style" attribute, if given
+        if (AdditionalAttributes != null && AdditionalAttributes.TryGetValue("style", out var styleAttr)) {
+            _additionalStyle = styleAttr.ToString() ?? string.Empty;
+        }
+
         base.OnParametersSet();
     }
+
 
 
     /// <summary>
