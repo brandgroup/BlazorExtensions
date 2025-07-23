@@ -54,7 +54,7 @@
                     </div>
                 </div>
 
-                <div class="card-body row row-cols-auto overflow-auto m-0">
+                <div class="card-body row row-cols-auto overflow-auto m-0 align-content-start">
                         @foreach (var file in _files) {
                             <div class="col">
                                 <FileManagerItem @key="file.Name" OnClick="OnItemClicked" File="file"></FileManagerItem>
