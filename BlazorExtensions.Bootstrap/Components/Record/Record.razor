@@ -106,9 +106,6 @@
     public bool Selected { get; set; } = false;
 
     [Parameter]
-    public string Style { get; set; } = string.Empty;
-
-    [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
     [Parameter]
@@ -138,7 +135,7 @@
 
         // Get the "style" attribute, if given
         if (AdditionalAttributes != null && AdditionalAttributes.TryGetValue("style", out var styleAttr)) {
-            _additionalClass = styleAttr.ToString() ?? string.Empty;
+            _additionalStyle = styleAttr.ToString() ?? string.Empty;
         }
     }
 
